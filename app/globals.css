@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* ═══════════════════════════════════════════════════
+   THEME TOKENS
+   ═══════════════════════════════════════════════════ */
+
+@layer base {
+  :root {
+    /* Accent color — terminal green */
+    --accent-color: #4ade80;
+
+    --background: 0 0% 100%;
+    --foreground: 0 0% 6%;
+    --card: 0 0% 97%;
+    --card-foreground: 0 0% 6%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 6%;
+    --primary: 142 69% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 95%;
+    --secondary-foreground: 0 0% 15%;
+    --muted: 0 0% 95%;
+    --muted-foreground: 0 0% 45%;
+    --accent: 0 0% 95%;
+    --accent-foreground: 0 0% 15%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 85%;
+    --input: 0 0% 85%;
+    --ring: 142 69% 58%;
+    --radius: 0rem;
+  }
+
+  .dark {
+    --accent-color: #4ade80;
+
+    --background: 120 5% 3%;
+    --foreground: 120 5% 90%;
+    --card: 120 5% 6%;
+    --card-foreground: 120 5% 90%;
+    --popover: 120 5% 3%;
+    --popover-foreground: 120 5% 90%;
+    --primary: 142 69% 58%;
+    --primary-foreground: 120 5% 3%;
+    --secondary: 120 5% 10%;
+    --secondary-foreground: 120 5% 80%;
+    --muted: 120 3% 10%;
+    --muted-foreground: 120 3% 50%;
+    --accent: 120 5% 10%;
+    --accent-foreground: 120 5% 80%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 95%;
+    --border: 120 5% 14%;
+    --input: 120 5% 14%;
+    --ring: 142 69% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  ::selection {
+    background: rgba(74, 222, 128, 0.25);
+    color: inherit;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   CUSTOM CURSOR
+   Only on devices with a fine pointer (mouse).
+   ═══════════════════════════════════════════════════ */
+
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}
+
+.custom-cursor {
+  pointer-events: none;
+  position: fixed;
+  z-index: 9999;
+  top: 0;
+  left: 0;
+}
+
+.custom-cursor__dot {
+  display: block;
+  width: 8px;
+  height: 8px;
+  background: var(--accent-color);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  will-change: transform;
+}
+
+.custom-cursor__ring {
+  display: block;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--accent-color);
+  border-radius: 50%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0.35;
+  will-change: transform;
+  transition: width 100ms, height 100ms, opacity 100ms;
+}
+
+.custom-cursor.cursor-hover .custom-cursor__ring {
+  width: 48px;
+  height: 48px;
+  opacity: 0.6;
+}
+
+/* Hide cursor on touch / small screens */
+@media (pointer: coarse) {
+  .custom-cursor {
+    display: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   UTILITY: SCROLLBAR (minimal)
+   ═══════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 3px;
+}
