@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect, useCallback } from "react";
 import { useTheme } from "next-themes";
-import type { SiteSettings, Project, Learning } from "@/types";
+import type { SiteSettings, Project, Learning, WorkExperience } from "@/types";
 
 /* ── Types ── */
 interface Line {
@@ -15,6 +15,7 @@ interface TerminalProps {
   settings: SiteSettings;
   projects: Project[];
   learnings: Learning[];
+  experience: WorkExperience[];
   socials: { label: string; href: string }[];
   onClose?: () => void;
   onMinimize?: () => void;
@@ -46,6 +47,8 @@ Available commands:
   project <n>     Show details for project #n
   learnings       List all learnings
   learning <n>    Show details for learning #n
+  experience      List work experience
+  exp <n>         Show details for experience #n
   socials         Show social links
   resume          Open resume in new tab
   repo            Open GitHub repo
@@ -78,6 +81,7 @@ export function InteractiveTerminal({
   settings,
   projects,
   learnings,
+  experience,
   socials,
   onClose,
   onMinimize,
@@ -239,6 +243,47 @@ export function InteractiveTerminal({
           break;
         }
 
+        case "experience":
+          if (experience.length === 0) {
+            push({ type: "muted", text: "No experience found." });
+          } else {
+            push({
+              type: "output",
+              text: experience
+                .map(
+                  (e, i) =>
+                    `  [${i + 1}] ${e.role} @ ${e.company}\n      ${e.start_date} — ${e.end_date || "Present"}`
+                )
+                .join("\n\n"),
+            });
+            push({
+              type: "muted",
+              text: "\nUse 'exp <n>' for details.",
+            });
+          }
+          break;
+
+        case "exp": {
+          const idx = parseInt(rest) - 1;
+          if (isNaN(idx) || idx < 0 || idx >= experience.length) {
+            push({
+              type: "error",
+              text: `Invalid experience number. Use 1-${experience.length}.`,
+            });
+          } else {
+            const e = experience[idx];
+            push(
+              { type: "accent", text: `${e.role} @ ${e.company}` },
+              { type: "muted", text: `${e.start_date} — ${e.end_date || "Present"}` },
+              { type: "muted", text: "" },
+              { type: "output", text: e.description },
+              { type: "muted", text: "" },
+              { type: "output", text: `Tech: ${e.tech.join(", ")}` }
+            );
+          }
+          break;
+        }
+
         case "socials":
           push({
             type: "output",
@@ -255,7 +300,7 @@ export function InteractiveTerminal({
 
         case "goto":
         case "cd": {
-          const valid = ["home", "projects", "learnings", "contact"];
+          const valid = ["home", "projects", "learnings", "experience", "contact"];
           const target = rest.replace(/^[~/\\.]+/, "").replace(/\/$/, "");
           if (!target || !valid.includes(target)) {
             push({
@@ -280,6 +325,7 @@ export function InteractiveTerminal({
             { name: "home/", desc: "Hero & introduction" },
             { name: "projects/", desc: `${projects.length} projects` },
             { name: "learnings/", desc: `${learnings.length} learnings` },
+            { name: "experience/", desc: `${experience.length} roles` },
             { name: "contact/", desc: "Get in touch" },
           ];
           push({
@@ -320,6 +366,14 @@ export function InteractiveTerminal({
                 text:
                   learnings
                     .map((l, i) => `  [${i + 1}] ${l.title}`)
+                    .join("\n") || "Empty.",
+              }),
+            experience: () =>
+              push({
+                type: "output",
+                text:
+                  experience
+                    .map((e, i) => `  [${i + 1}] ${e.role} @ ${e.company}`)
                     .join("\n") || "Empty.",
               }),
             contact: () =>
@@ -419,7 +473,8 @@ export function InteractiveTerminal({
             { type: "output", text: `  Backend:    Supabase` },
             { type: "output", text: `  Font:       JetBrains Mono` },
             { type: "output", text: `  Projects:   ${projects.length}` },
-            { type: "output", text: `  Learnings:  ${learnings.length}` }
+            { type: "output", text: `  Learnings:  ${learnings.length}` },
+            { type: "output", text: `  Experience: ${experience.length}` }
           );
           break;
         }

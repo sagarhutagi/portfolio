@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import { Home, FolderOpen, BookOpen, Mail, Menu, Github, Twitter, Linkedin } from "lucide-react";
+import { Home, FolderOpen, BookOpen, Briefcase, Mail, Menu, Github, Twitter, Linkedin } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { MobileMenu } from "./mobile-menu";
 import { supabase } from "@/lib/supabase";
@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { href: "#home", label: "Home", icon: Home },
   { href: "#projects", label: "Projects", icon: FolderOpen },
   { href: "#learnings", label: "Learnings", icon: BookOpen },
+  { href: "#experience", label: "Experience", icon: Briefcase },
   { href: "#contact", label: "Contact", icon: Mail },
 ];
 

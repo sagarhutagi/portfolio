@@ -44,6 +44,17 @@ export interface Learning {
   order: number;
 }
 
+export interface WorkExperience {
+  id: string;
+  company: string;
+  role: string;
+  start_date: string;
+  end_date: string; // empty string = "Present"
+  description: string;
+  tech: string[];
+  order: number;
+}
+
 export interface ContactSubmission {
   id: string;
   name: string;
@@ -51,4 +62,17 @@ export interface ContactSubmission {
   message: string;
   created_at: string;
   is_read: boolean;
+}
+
+export interface PageView {
+  id: string;
+  path: string;
+  referrer: string;
+  user_agent: string;
+  country: string;
+  city: string;
+  device: string;
+  browser: string;
+  os: string;
+  created_at: string;
 }

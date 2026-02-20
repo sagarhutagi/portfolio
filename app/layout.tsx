@@ -3,6 +3,7 @@ import { JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LayoutShell } from "@/components/layout-shell";
 import { CustomCursor } from "@/components/custom-cursor";
+import { PageViewTracker } from "@/components/page-view-tracker";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -66,6 +67,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <CustomCursor />
+          <PageViewTracker />
           <LayoutShell>{children}</LayoutShell>
           <Toaster
             position="bottom-right"

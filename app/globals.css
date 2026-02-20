@@ -149,3 +149,16 @@ html {
   background: hsl(var(--border));
   border-radius: 3px;
 }
+
+/* ═══════════════════════════════════════════════════
+   ORBITING SKILLS ANIMATION
+   ═══════════════════════════════════════════════════ */
+
+@keyframes spin-orbit {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

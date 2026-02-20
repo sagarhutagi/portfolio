@@ -2,7 +2,7 @@
 
 import { createServerSupabase, verifyAuth } from "./supabase-server";
 import { revalidatePath } from "next/cache";
-import type { SiteSettings, Project, Learning } from "@/types";
+import type { SiteSettings, Project, Learning, WorkExperience } from "@/types";
 
 /* ═══════════════════════════════════════════════════
    PUBLIC ACTIONS
@@ -230,6 +230,84 @@ export async function markMessageRead(
       .update({ is_read: true })
       .eq("id", id);
     if (error) return { success: false, error: error.message };
+    return { success: true };
+  } catch {
+    return { success: false, error: "Unauthorized or server error." };
+  }
+}
+
+/* ── Experience CRUD ── */
+
+export async function createExperience(
+  token: string,
+  data: Omit<WorkExperience, "id">
+): Promise<{ success: boolean; error?: string; id?: string }> {
+  try {
+    await verifyAuth(token);
+    const db = createServerSupabase();
+    const { data: row, error } = await db
+      .from("experience")
+      .insert({
+        ...data,
+        tech: JSON.stringify(data.tech),
+      })
+      .select("id")
+      .single();
+    if (error) return { success: false, error: error.message };
+    revalidatePath("/");
+    return { success: true, id: row?.id };
+  } catch {
+    return { success: false, error: "Unauthorized or server error." };
+  }
+}
+
+export async function updateExperience(
+  token: string,
+  id: string,
+  data: Partial<WorkExperience>
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await verifyAuth(token);
+    const db = createServerSupabase();
+    const payload: Record<string, unknown> = { ...data };
+    if (data.tech) payload.tech = JSON.stringify(data.tech);
+    const { error } = await db.from("experience").update(payload).eq("id", id);
+    if (error) return { success: false, error: error.message };
+    revalidatePath("/");
+    return { success: true };
+  } catch {
+    return { success: false, error: "Unauthorized or server error." };
+  }
+}
+
+export async function deleteExperience(
+  token: string,
+  id: string
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await verifyAuth(token);
+    const db = createServerSupabase();
+    const { error } = await db.from("experience").delete().eq("id", id);
+    if (error) return { success: false, error: error.message };
+    revalidatePath("/");
+    return { success: true };
+  } catch {
+    return { success: false, error: "Unauthorized or server error." };
+  }
+}
+
+export async function reorderExperience(
+  token: string,
+  orderedIds: string[]
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    await verifyAuth(token);
+    const db = createServerSupabase();
+    const updates = orderedIds.map((id, index) =>
+      db.from("experience").update({ order: index }).eq("id", id)
+    );
+    await Promise.all(updates);
+    revalidatePath("/");
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };

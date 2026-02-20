@@ -1,4 +1,4 @@
-import type { SiteSettings, Project, Learning } from "@/types";
+import type { SiteSettings, Project, Learning, WorkExperience } from "@/types";
 import { createServerSupabase } from "./supabase-server";
 
 /* ── Dummy / fallback data (used when Supabase is not configured) ── */
@@ -146,6 +146,42 @@ const FALLBACK_LEARNINGS: Learning[] = [
   },
 ];
 
+const FALLBACK_EXPERIENCE: WorkExperience[] = [
+  {
+    id: "1",
+    company: "Acme Corp",
+    role: "Senior Full Stack Developer",
+    start_date: "2023-01",
+    end_date: "",
+    description:
+      "Leading frontend architecture migration to Next.js App Router. Building real-time dashboards, mentoring junior developers, and driving CI/CD improvements that cut deploy times by 60%.",
+    tech: ["Next.js", "TypeScript", "Supabase", "Tailwind CSS"],
+    order: 0,
+  },
+  {
+    id: "2",
+    company: "Startup Inc",
+    role: "Full Stack Developer",
+    start_date: "2021-06",
+    end_date: "2022-12",
+    description:
+      "Built and maintained the core SaaS product from MVP to 10k+ users. Implemented Stripe billing, real-time notifications, and a component library used across 3 products.",
+    tech: ["React", "Node.js", "PostgreSQL", "AWS"],
+    order: 1,
+  },
+  {
+    id: "3",
+    company: "Freelance",
+    role: "Web Developer",
+    start_date: "2019-09",
+    end_date: "2021-05",
+    description:
+      "Delivered 15+ client projects including e-commerce sites, landing pages, and custom WordPress themes. Focused on performance optimization and responsive design.",
+    tech: ["JavaScript", "React", "WordPress", "Figma"],
+    order: 2,
+  },
+];
+
 /* ── Data fetching functions ── */
 
 function isSupabaseConfigured(): boolean {
@@ -212,4 +248,22 @@ export async function getLearnings(): Promise<Learning[]> {
   }
 }
 
-export { FALLBACK_SETTINGS, FALLBACK_PROJECTS, FALLBACK_LEARNINGS };
+export async function getExperience(): Promise<WorkExperience[]> {
+  if (!isSupabaseConfigured()) return FALLBACK_EXPERIENCE;
+  try {
+    const db = createServerSupabase();
+    const { data, error } = await db
+      .from("experience")
+      .select("*")
+      .order("order", { ascending: true });
+    if (error || !data) return FALLBACK_EXPERIENCE;
+    return data.map((e) => ({
+      ...e,
+      tech: typeof e.tech === "string" ? JSON.parse(e.tech) : e.tech,
+    })) as WorkExperience[];
+  } catch {
+    return FALLBACK_EXPERIENCE;
+  }
+}
+
+export { FALLBACK_SETTINGS, FALLBACK_PROJECTS, FALLBACK_LEARNINGS, FALLBACK_EXPERIENCE };

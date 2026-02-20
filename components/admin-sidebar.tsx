@@ -9,15 +9,19 @@ import {
   MessageSquare,
   LogOut,
   Home,
+  Briefcase,
+  BarChart3,
 } from "lucide-react";
 import { supabase } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 
 const ADMIN_LINKS = [
   { href: "/admin", label: "Dashboard", icon: Home },
+  { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/settings", label: "Settings", icon: Settings },
   { href: "/admin/projects", label: "Projects", icon: FolderOpen },
   { href: "/admin/learnings", label: "Learnings", icon: BookOpen },
+  { href: "/admin/experience", label: "Experience", icon: Briefcase },
   { href: "/admin/messages", label: "Messages", icon: MessageSquare },
 ];
 

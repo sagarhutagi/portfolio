@@ -2,12 +2,13 @@
 
 import { useState, useEffect } from "react";
 import { InteractiveTerminal } from "./interactive-terminal";
-import type { SiteSettings, Project, Learning } from "@/types";
+import type { SiteSettings, Project, Learning, WorkExperience } from "@/types";
 
 interface TerminalDrawerProps {
   settings: SiteSettings;
   projects: Project[];
   learnings: Learning[];
+  experience: WorkExperience[];
   socials: { label: string; href: string }[];
 }
 
@@ -17,6 +18,7 @@ export function TerminalDrawer({
   settings,
   projects,
   learnings,
+  experience,
   socials,
 }: TerminalDrawerProps) {
   const [open, setOpen] = useState(false);
@@ -125,6 +127,7 @@ export function TerminalDrawer({
             settings={settings}
             projects={projects}
             learnings={learnings}
+            experience={experience}
             socials={socials}
             onClose={() => { setOpen(false); setSize("normal"); }}
             onMinimize={() => setSize((s) => s === "minimized" ? "normal" : "minimized")}

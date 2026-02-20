@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import { Mail, MapPin, Github, Twitter, Linkedin, User } from "lucide-react";
-import { getSettings, getProjects, getLearnings } from "@/lib/data";
+import { getSettings, getProjects, getLearnings, getExperience } from "@/lib/data";
 import { ProjectsView } from "@/components/projects-view";
 import { LearningsView } from "@/components/learnings-view";
+import { ExperienceView } from "@/components/experience-view";
+import { OrbitingSkills } from "@/components/orbiting-skills";
 import { ContactForm } from "@/components/contact-form";
 import { TerminalDrawer } from "@/components/terminal-drawer";
 
@@ -58,10 +60,11 @@ function buildSocialsPlain(s: { github_url: string; twitter_url: string; linkedi
 }
 
 export default async function HomePage() {
-  const [s, projects, learnings] = await Promise.all([
+  const [s, projects, learnings, experience] = await Promise.all([
     getSettings(),
     getProjects(),
     getLearnings(),
+    getExperience(),
   ]);
 
   const SOCIALS = buildSocials(s);
@@ -127,21 +130,12 @@ export default async function HomePage() {
 
         {/* ── Skills & About side-by-side ── */}
         <section className="mb-20 grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Skills */}
+          {/* Skills — orbiting animation */}
           <div>
             <h2 className="text-xs text-[var(--accent-color)] mb-4">
               <span className="text-muted-foreground">// </span>skills
             </h2>
-            <div className="flex flex-wrap gap-2">
-              {s.skills.map((skill) => (
-                <span
-                  key={skill}
-                  className="px-2.5 py-1 text-xs border border-border text-foreground/80 hover:border-[var(--accent-color)]/40 hover:text-[var(--accent-color)] transition-colors"
-                >
-                  {skill}
-                </span>
-              ))}
-            </div>
+            <OrbitingSkills skills={s.skills} />
           </div>
 
           {/* About */}
@@ -197,6 +191,17 @@ export default async function HomePage() {
             Notes, insights, and things I&apos;ve picked up along the way.
           </p>
           <LearningsView learnings={learnings} />
+        </section>
+
+        {/* ── Experience ── */}
+        <section id="experience" className="mb-20 scroll-mt-20">
+          <h2 className="text-xl font-bold tracking-tight mb-1">
+            <span className="text-[var(--accent-color)] mr-2">$</span>cat ./experience
+          </h2>
+          <p className="text-xs text-muted-foreground mb-8">
+            My professional journey and work history.
+          </p>
+          <ExperienceView experience={experience} />
         </section>
 
         {/* ── Contact ── */}
@@ -266,6 +271,7 @@ export default async function HomePage() {
         settings={s}
         projects={projects}
         learnings={learnings}
+        experience={experience}
         socials={SOCIALS_PLAIN}
       />
     </>
