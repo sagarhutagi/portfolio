@@ -162,3 +162,49 @@ html {
     transform: rotate(360deg);
   }
 }
+
+/* ═══════════════════════════════════════════════════
+   WASM TERMINAL (xterm.js overrides)
+   ═══════════════════════════════════════════════════ */
+
+.wasm-xterm-host {
+  overflow: hidden;
+}
+
+.wasm-xterm-host .xterm {
+  height: 100%;
+  padding: 4px;
+}
+
+.wasm-xterm-host .xterm-viewport {
+  background-color: transparent !important;
+  overflow-y: auto !important;
+}
+
+.wasm-xterm-host .xterm-viewport::-webkit-scrollbar {
+  width: 4px;
+}
+
+.wasm-xterm-host .xterm-viewport::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wasm-xterm-host .xterm-viewport::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 2px;
+}
+
+.wasm-xterm-host .xterm-screen {
+  height: 100% !important;
+}
+
+/* Make sure the xterm cursor stays visible */
+.wasm-xterm-host .xterm-cursor-layer {
+  z-index: 10;
+}
+
+/* Disable the global custom cursor inside xterm */
+.wasm-xterm-host,
+.wasm-xterm-host * {
+  cursor: text !important;
+}

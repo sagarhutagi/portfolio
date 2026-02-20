@@ -20,6 +20,7 @@ interface TerminalProps {
   onClose?: () => void;
   onMinimize?: () => void;
   onMaximize?: () => void;
+  onWasm?: () => void;
   minimized?: boolean;
 }
 
@@ -66,6 +67,11 @@ Available commands:
   clear           Clear the terminal
   exit            Close the terminal
   help            Show this help message
+
+  Advanced
+  -----------------------------------
+  wasm            Launch real WASM shell
+                  (xterm.js + virtual filesystem)
 `.trim();
 
 const ASCII_BANNER = `
@@ -86,6 +92,7 @@ export function InteractiveTerminal({
   onClose,
   onMinimize,
   onMaximize,
+  onWasm,
   minimized = false,
 }: TerminalProps) {
   const { theme, setTheme } = useTheme();
@@ -553,6 +560,14 @@ export function InteractiveTerminal({
           });
           break;
 
+        case "wasm":
+          push(
+            { type: "accent", text: "Launching WASM shell..." },
+            { type: "muted", text: "Loading xterm.js + virtual filesystem..." }
+          );
+          setTimeout(() => onWasm?.(), 300);
+          break;
+
         case "exit":
         case "quit":
           push({ type: "muted", text: "Closing terminal..." });
@@ -566,7 +581,7 @@ export function InteractiveTerminal({
           });
       }
     },
-    [push, settings, projects, learnings, socials, history, theme, setTheme, cwd, onClose]
+    [push, settings, projects, learnings, socials, history, theme, setTheme, cwd, onClose, onWasm]
   );
 
   /* ── Key handling ── */

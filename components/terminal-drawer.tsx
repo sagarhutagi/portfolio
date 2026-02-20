@@ -1,8 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { InteractiveTerminal } from "./interactive-terminal";
 import type { SiteSettings, Project, Learning, WorkExperience } from "@/types";
+
+/* Lazy-load the heavy WASM terminal only when needed */
+const WasmTerminal = lazy(() =>
+  import("./wasm-terminal").then((mod) => ({ default: mod.WasmTerminal }))
+);
 
 interface TerminalDrawerProps {
   settings: SiteSettings;
@@ -13,6 +18,7 @@ interface TerminalDrawerProps {
 }
 
 type DrawerSize = "normal" | "minimized" | "maximized";
+type TerminalMode = "classic" | "wasm";
 
 export function TerminalDrawer({
   settings,
@@ -23,6 +29,7 @@ export function TerminalDrawer({
 }: TerminalDrawerProps) {
   const [open, setOpen] = useState(false);
   const [size, setSize] = useState<DrawerSize>("normal");
+  const [mode, setMode] = useState<TerminalMode>("classic");
 
   /* Lock body scroll when open (but not when minimized) */
   useEffect(() => {
@@ -51,6 +58,12 @@ export function TerminalDrawer({
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [open]);
+
+  const handleClose = () => {
+    setOpen(false);
+    setSize("normal");
+    setMode("classic");
+  };
 
   return (
     <>
@@ -88,7 +101,7 @@ export function TerminalDrawer({
       {open && size !== "minimized" && (
         <div
           className="fixed inset-0 z-40 bg-black/60 backdrop-blur-[2px] transition-opacity"
-          onClick={() => { setOpen(false); setSize("normal"); }}
+          onClick={handleClose}
         />
       )}
 
@@ -123,17 +136,83 @@ export function TerminalDrawer({
           {/* Glow line at top */}
           <div className="h-px bg-gradient-to-r from-transparent via-[var(--accent-color)]/50 to-transparent" />
 
-          <InteractiveTerminal
-            settings={settings}
-            projects={projects}
-            learnings={learnings}
-            experience={experience}
-            socials={socials}
-            onClose={() => { setOpen(false); setSize("normal"); }}
-            onMinimize={() => setSize((s) => s === "minimized" ? "normal" : "minimized")}
-            onMaximize={() => setSize((s) => s === "maximized" ? "normal" : "maximized")}
-            minimized={size === "minimized"}
-          />
+          {mode === "classic" ? (
+            <InteractiveTerminal
+              settings={settings}
+              projects={projects}
+              learnings={learnings}
+              experience={experience}
+              socials={socials}
+              onClose={handleClose}
+              onMinimize={() => setSize((s) => s === "minimized" ? "normal" : "minimized")}
+              onMaximize={() => setSize((s) => s === "maximized" ? "normal" : "maximized")}
+              onWasm={() => setMode("wasm")}
+              minimized={size === "minimized"}
+            />
+          ) : (
+            <div className="flex flex-col flex-1 min-h-0 overflow-hidden border border-border bg-[hsl(var(--card))]">
+              {/* Title bar for WASM mode */}
+              <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-background/50 shrink-0">
+                <button
+                  onClick={handleClose}
+                  className="w-2.5 h-2.5 rounded-full bg-red-500/70 hover:bg-red-500 transition-colors focus:outline-none group relative"
+                  aria-label="Close terminal"
+                  data-interactive
+                >
+                  <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold text-black/0 group-hover:text-black/80 transition-colors">✕</span>
+                </button>
+                <button
+                  onClick={() => setSize((s) => s === "minimized" ? "normal" : "minimized")}
+                  className="w-2.5 h-2.5 rounded-full bg-yellow-500/70 hover:bg-yellow-500 transition-colors focus:outline-none group relative"
+                  aria-label="Minimize terminal"
+                  data-interactive
+                >
+                  <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold text-black/0 group-hover:text-black/80 transition-colors">−</span>
+                </button>
+                <button
+                  onClick={() => setSize((s) => s === "maximized" ? "normal" : "maximized")}
+                  className="w-2.5 h-2.5 rounded-full bg-green-500/70 hover:bg-green-500 transition-colors focus:outline-none group relative"
+                  aria-label="Maximize terminal"
+                  data-interactive
+                >
+                  <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold text-black/0 group-hover:text-black/80 transition-colors">⤢</span>
+                </button>
+                <span className="text-[10px] text-muted-foreground ml-2">
+                  wasm-sh — visitor@portfolio
+                </span>
+                <button
+                  onClick={() => setMode("classic")}
+                  className="ml-auto text-[10px] text-muted-foreground hover:text-[var(--accent-color)] transition-colors px-2 py-0.5 border border-border hover:border-[var(--accent-color)]/40"
+                  data-interactive
+                  title="Switch back to classic terminal"
+                >
+                  ← classic
+                </button>
+              </div>
+
+              {size !== "minimized" && (
+                <Suspense
+                  fallback={
+                    <div className="flex-1 flex items-center justify-center">
+                      <div className="text-center">
+                        <div className="inline-block w-4 h-4 border-2 border-[var(--accent-color)]/40 border-t-[var(--accent-color)] rounded-full animate-spin mb-3" />
+                        <p className="text-xs text-muted-foreground">Loading WASM shell...</p>
+                      </div>
+                    </div>
+                  }
+                >
+                  <WasmTerminal
+                    settings={settings}
+                    projects={projects}
+                    learnings={learnings}
+                    experience={experience}
+                    socials={socials}
+                    onExit={() => setMode("classic")}
+                  />
+                </Suspense>
+              )}
+            </div>
+          )}
         </div>
       </div>
     </>
