@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Home, FolderOpen, BookOpen, Mail, Menu, Github, Twitter, Linkedin } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 import { MobileMenu } from "./mobile-menu";
+import { supabase } from "@/lib/supabase";
 
 const NAV_LINKS = [
   { href: "#home", label: "Home", icon: Home },
@@ -13,16 +14,39 @@ const NAV_LINKS = [
   { href: "#contact", label: "Contact", icon: Mail },
 ];
 
-const SOCIALS = [
-  { label: "GitHub", href: "https://github.com/example", icon: Github },
-  { label: "Twitter", href: "https://twitter.com/example", icon: Twitter },
-  { label: "LinkedIn", href: "https://linkedin.com/in/example", icon: Linkedin },
-];
+interface SocialLink {
+  label: string;
+  href: string;
+  icon: typeof Github;
+}
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("#home");
+  const [socials, setSocials] = useState<SocialLink[]>([]);
   const pathname = usePathname();
+
+  /* Hide on admin routes */
+  if (pathname.startsWith("/admin")) return null;
+
+  /* Fetch social links from settings */
+  useEffect(() => {
+    async function loadSocials() {
+      const { data } = await supabase
+        .from("settings")
+        .select("github_url, twitter_url, linkedin_url")
+        .eq("id", 1)
+        .single();
+      if (data) {
+        const links: SocialLink[] = [];
+        if (data.github_url) links.push({ label: "GitHub", href: data.github_url, icon: Github });
+        if (data.twitter_url) links.push({ label: "Twitter", href: data.twitter_url, icon: Twitter });
+        if (data.linkedin_url) links.push({ label: "LinkedIn", href: data.linkedin_url, icon: Linkedin });
+        setSocials(links);
+      }
+    }
+    loadSocials();
+  }, []);
 
   /* Hide on admin routes */
   if (pathname.startsWith("/admin")) return null;
@@ -94,7 +118,7 @@ export function Navbar() {
 
         {/* Social links */}
         <div className="flex items-center gap-3 mb-4">
-          {SOCIALS.map((social) => {
+          {socials.map((social) => {
             const Icon = social.icon;
             return (
               <a

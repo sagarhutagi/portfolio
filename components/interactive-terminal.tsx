@@ -443,10 +443,12 @@ export function InteractiveTerminal({
           break;
         }
 
-        case "repo":
+        case "repo": {
+          const ghUrl = socials.find((s) => s.label === "GitHub")?.href || "https://github.com";
           push({ type: "accent", text: "Opening GitHub repo..." });
-          window.open("https://github.com", "_blank");
+          window.open(ghUrl, "_blank");
           break;
+        }
 
         case "cowsay": {
           const msg = rest || "Moo!";

@@ -25,6 +25,15 @@ const FALLBACK_SETTINGS: SiteSettings = {
   ],
   current_status: "Currently building: Next.js Portfolio",
   resume_url: "https://example.com/resume.pdf",
+  email: "hello@example.com",
+  location: "San Francisco, CA",
+  github_url: "https://github.com/example",
+  twitter_url: "https://twitter.com/example",
+  linkedin_url: "https://linkedin.com/in/example",
+  focus: "Full Stack",
+  reading: "Clean Code",
+  interests: "OSS, Design",
+  profile_image_url: "",
 };
 
 const FALLBACK_PROJECTS: Project[] = [

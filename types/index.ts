@@ -9,6 +9,19 @@ export interface SiteSettings {
   skills: string[];
   current_status: string;
   resume_url: string;
+  // Contact & location
+  email: string;
+  location: string;
+  // Social links
+  github_url: string;
+  twitter_url: string;
+  linkedin_url: string;
+  // Info cards
+  focus: string;
+  reading: string;
+  interests: string;
+  // Profile image
+  profile_image_url: string;
 }
 
 export interface Project {

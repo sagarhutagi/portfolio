@@ -150,6 +150,126 @@ export default function AdminSettingsPage() {
           />
         </div>
 
+        <div className="space-y-2">
+          <Label>Profile Image URL</Label>
+          <Input
+            value={settings.profile_image_url}
+            onChange={(e) =>
+              setSettings({ ...settings, profile_image_url: e.target.value })
+            }
+            placeholder="https://example.com/photo.jpg"
+          />
+          <p className="text-xs text-muted-foreground">
+            Leave blank to show a default icon.
+          </p>
+        </div>
+
+        {/* ── Contact & Location ── */}
+        <div className="pt-4 border-t border-border">
+          <h2 className="text-sm font-semibold mb-4">Contact & Location</h2>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Email</Label>
+          <Input
+            value={settings.email}
+            onChange={(e) =>
+              setSettings({ ...settings, email: e.target.value })
+            }
+            placeholder="hello@example.com"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>Location</Label>
+          <Input
+            value={settings.location}
+            onChange={(e) =>
+              setSettings({ ...settings, location: e.target.value })
+            }
+            placeholder="San Francisco, CA"
+          />
+        </div>
+
+        {/* ── Social Links ── */}
+        <div className="pt-4 border-t border-border">
+          <h2 className="text-sm font-semibold mb-4">Social Links</h2>
+        </div>
+
+        <div className="space-y-2">
+          <Label>GitHub URL</Label>
+          <Input
+            value={settings.github_url}
+            onChange={(e) =>
+              setSettings({ ...settings, github_url: e.target.value })
+            }
+            placeholder="https://github.com/username"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>Twitter / X URL</Label>
+          <Input
+            value={settings.twitter_url}
+            onChange={(e) =>
+              setSettings({ ...settings, twitter_url: e.target.value })
+            }
+            placeholder="https://twitter.com/username"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>LinkedIn URL</Label>
+          <Input
+            value={settings.linkedin_url}
+            onChange={(e) =>
+              setSettings({ ...settings, linkedin_url: e.target.value })
+            }
+            placeholder="https://linkedin.com/in/username"
+          />
+        </div>
+
+        {/* ── Info Cards ── */}
+        <div className="pt-4 border-t border-border">
+          <h2 className="text-sm font-semibold mb-4">Info Cards</h2>
+          <p className="text-xs text-muted-foreground mb-4">
+            These show as small cards on your homepage.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label>Focus</Label>
+          <Input
+            value={settings.focus}
+            onChange={(e) =>
+              setSettings({ ...settings, focus: e.target.value })
+            }
+            placeholder="Full Stack"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>Currently Reading</Label>
+          <Input
+            value={settings.reading}
+            onChange={(e) =>
+              setSettings({ ...settings, reading: e.target.value })
+            }
+            placeholder="Clean Code"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>Interests</Label>
+          <Input
+            value={settings.interests}
+            onChange={(e) =>
+              setSettings({ ...settings, interests: e.target.value })
+            }
+            placeholder="OSS, Design"
+          />
+        </div>
+
         <Button onClick={handleSave} disabled={saving}>
           {saving ? "Saving…" : "Save Settings"}
         </Button>

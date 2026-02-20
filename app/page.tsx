@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { ExternalLink } from "lucide-react";
 import { Mail, MapPin, Github, Twitter, Linkedin, User } from "lucide-react";
 import { getSettings, getProjects, getLearnings } from "@/lib/data";
@@ -24,17 +25,27 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const SOCIALS = [
-  { label: "GitHub", href: "https://github.com/example", icon: Github },
-  { label: "Twitter / X", href: "https://twitter.com/example", icon: Twitter },
-  { label: "LinkedIn", href: "https://linkedin.com/in/example", icon: Linkedin },
-];
+const SOCIAL_ICON_MAP = {
+  GitHub: Github,
+  "Twitter / X": Twitter,
+  LinkedIn: Linkedin,
+};
 
-const SOCIALS_PLAIN = [
-  { label: "GitHub", href: "https://github.com/example" },
-  { label: "Twitter / X", href: "https://twitter.com/example" },
-  { label: "LinkedIn", href: "https://linkedin.com/in/example" },
-];
+function buildSocials(s: { github_url: string; twitter_url: string; linkedin_url: string }) {
+  const list: { label: string; href: string; icon: typeof Github }[] = [];
+  if (s.github_url) list.push({ label: "GitHub", href: s.github_url, icon: Github });
+  if (s.twitter_url) list.push({ label: "Twitter / X", href: s.twitter_url, icon: Twitter });
+  if (s.linkedin_url) list.push({ label: "LinkedIn", href: s.linkedin_url, icon: Linkedin });
+  return list;
+}
+
+function buildSocialsPlain(s: { github_url: string; twitter_url: string; linkedin_url: string }) {
+  const list: { label: string; href: string }[] = [];
+  if (s.github_url) list.push({ label: "GitHub", href: s.github_url });
+  if (s.twitter_url) list.push({ label: "Twitter / X", href: s.twitter_url });
+  if (s.linkedin_url) list.push({ label: "LinkedIn", href: s.linkedin_url });
+  return list;
+}
 
 export default async function HomePage() {
   const [s, projects, learnings] = await Promise.all([
@@ -42,6 +53,9 @@ export default async function HomePage() {
     getProjects(),
     getLearnings(),
   ]);
+
+  const SOCIALS = buildSocials(s);
+  const SOCIALS_PLAIN = buildSocialsPlain(s);
 
   /* JSON-LD structured data */
   const jsonLd = {
@@ -66,8 +80,17 @@ export default async function HomePage() {
           <div className="flex items-start gap-6 mb-6">
             {/* Profile picture placeholder */}
             <div className="shrink-0 w-20 h-20 md:w-24 md:h-24 border border-[var(--accent-color)]/40 flex items-center justify-center overflow-hidden bg-[var(--accent-color)]/5">
-              {/* Replace the icon below with: <Image src="/your-photo.jpg" ... /> */}
-              <User size={36} className="text-[var(--accent-color)]/60" />
+              {s.profile_image_url ? (
+                <Image
+                  src={s.profile_image_url}
+                  alt={s.name}
+                  width={96}
+                  height={96}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <User size={36} className="text-[var(--accent-color)]/60" />
+              )}
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-2">$ whoami</p>
@@ -127,19 +150,19 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <div className="p-4 border border-border">
               <p className="text-[10px] text-[var(--accent-color)] uppercase tracking-wider mb-1">location</p>
-              <p className="text-sm">San Francisco</p>
+              <p className="text-sm">{s.location}</p>
             </div>
             <div className="p-4 border border-border">
               <p className="text-[10px] text-[var(--accent-color)] uppercase tracking-wider mb-1">focus</p>
-              <p className="text-sm">Full Stack</p>
+              <p className="text-sm">{s.focus}</p>
             </div>
             <div className="p-4 border border-border">
               <p className="text-[10px] text-[var(--accent-color)] uppercase tracking-wider mb-1">reading</p>
-              <p className="text-sm">Clean Code</p>
+              <p className="text-sm">{s.reading}</p>
             </div>
             <div className="p-4 border border-border">
               <p className="text-[10px] text-[var(--accent-color)] uppercase tracking-wider mb-1">interests</p>
-              <p className="text-sm">OSS, Design</p>
+              <p className="text-sm">{s.interests}</p>
             </div>
           </div>
         </section>
@@ -184,11 +207,11 @@ export default async function HomePage() {
                 <div>
                   <p className="text-xs text-muted-foreground mb-0.5">Email</p>
                   <a
-                    href="mailto:hello@example.com"
+                    href={`mailto:${s.email}`}
                     className="text-sm text-foreground hover:text-[var(--accent-color)]"
                     data-interactive
                   >
-                    hello@example.com
+                    {s.email}
                   </a>
                 </div>
               </div>
@@ -199,7 +222,7 @@ export default async function HomePage() {
                   <p className="text-xs text-muted-foreground mb-0.5">
                     Location
                   </p>
-                  <p className="text-sm text-foreground">San Francisco, CA</p>
+                  <p className="text-sm text-foreground">{s.location}</p>
                 </div>
               </div>
 

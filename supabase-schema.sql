@@ -12,7 +12,20 @@ create table if not exists public.settings (
   about      text not null default '',
   skills     jsonb not null default '["Next.js","React","TypeScript","Tailwind CSS","Supabase"]'::jsonb,
   current_status text not null default 'Currently building: Next.js Portfolio',
-  resume_url text not null default 'https://example.com/resume.pdf'
+  resume_url text not null default 'https://example.com/resume.pdf',
+  -- Contact & location
+  email      text not null default 'hello@example.com',
+  location   text not null default 'San Francisco, CA',
+  -- Social links
+  github_url   text not null default '',
+  twitter_url  text not null default '',
+  linkedin_url text not null default '',
+  -- Info cards
+  focus      text not null default 'Full Stack',
+  reading    text not null default 'Clean Code',
+  interests  text not null default 'OSS, Design',
+  -- Profile image
+  profile_image_url text not null default ''
 );
 
 -- Seed the single settings row
@@ -176,3 +189,17 @@ values
     'Database indexes speed up reads at the cost of slower writes. Always index foreign keys and WHERE clause columns. Use EXPLAIN ANALYZE to understand query performance. Partial indexes reduce size for subset queries.',
     1
   );
+
+-- ═══════════════════════════════════════════════════════════════
+-- MIGRATION: If you already have the settings table, run this
+-- to add the new columns:
+-- ═══════════════════════════════════════════════════════════════
+-- alter table public.settings add column if not exists email text not null default 'hello@example.com';
+-- alter table public.settings add column if not exists location text not null default 'San Francisco, CA';
+-- alter table public.settings add column if not exists github_url text not null default '';
+-- alter table public.settings add column if not exists twitter_url text not null default '';
+-- alter table public.settings add column if not exists linkedin_url text not null default '';
+-- alter table public.settings add column if not exists focus text not null default 'Full Stack';
+-- alter table public.settings add column if not exists reading text not null default 'Clean Code';
+-- alter table public.settings add column if not exists interests text not null default 'OSS, Design';
+-- alter table public.settings add column if not exists profile_image_url text not null default '';
