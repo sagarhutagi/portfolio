@@ -10,17 +10,27 @@ import { TerminalDrawer } from "@/components/terminal-drawer";
 
 export async function generateMetadata(): Promise<Metadata> {
   const s = await getSettings();
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
   return {
     title: `${s.name} — ${s.title}`,
     description: s.intro,
     openGraph: {
       title: `${s.name} — ${s.title}`,
       description: s.intro,
+      images: [
+        {
+          url: `${siteUrl}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: `${s.name} — ${s.title}`,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
       title: `${s.name} — ${s.title}`,
       description: s.intro,
+      images: [`${siteUrl}/twitter-image`],
     },
   };
 }
