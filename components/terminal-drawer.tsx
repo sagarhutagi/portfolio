@@ -71,8 +71,8 @@ export function TerminalDrawer({
       <button
         onClick={() => setOpen((prev) => !prev)}
         className={`
-          fixed bottom-6 right-6 z-50
-          w-12 h-12 
+          fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50
+          w-10 h-10 sm:w-12 sm:h-12 
           border border-[var(--accent-color)]/50
           bg-background/90 backdrop-blur-sm
           flex items-center justify-center
@@ -130,7 +130,7 @@ export function TerminalDrawer({
           className={`
             bg-background border-t border-[var(--accent-color)]/30 flex flex-col
             transition-[height] duration-300 ease-out
-            ${size === "maximized" ? "h-screen" : size === "minimized" ? "h-auto" : "h-[60vh] md:h-[50vh]"}
+            ${size === "maximized" ? "h-screen" : size === "minimized" ? "h-auto" : "h-[45vh] sm:h-[55vh] md:h-[50vh]"}
           `}
         >
           {/* Glow line at top */}

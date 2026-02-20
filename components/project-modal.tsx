@@ -26,7 +26,7 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
       {/* Close button */}
       <button
         onClick={onClose}
-        className="fixed top-6 right-6 z-50 p-2 text-muted-foreground hover:text-[var(--accent-color)] transition-colors"
+        className="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 p-2 text-muted-foreground hover:text-[var(--accent-color)] transition-colors bg-background/80 backdrop-blur-sm"
         aria-label="Close project details"
         data-interactive
       >
@@ -34,10 +34,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
       </button>
 
       {/* Content */}
-      <div className="max-w-3xl mx-auto px-6 py-16 md:px-8 md:pl-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:px-8 md:pl-12">
         {/* Title */}
         <p className="text-xs text-muted-foreground mb-2">$ cat ./projects/{project.title.toLowerCase().replace(/\s+/g, "-")}</p>
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-8">
+        <h1 className="text-xl sm:text-2xl md:text-3xl font-bold tracking-tight mb-6 sm:mb-8">
           {project.title}
         </h1>
 

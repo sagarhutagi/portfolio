@@ -14,27 +14,35 @@ interface OrbitingSkillsProps {
 export function OrbitingSkills({ skills }: OrbitingSkillsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mounted, setMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setMounted(true);
+    const check = () => setIsMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Split skills into 2-3 rings
-  const ringCount = skills.length <= 4 ? 1 : skills.length <= 8 ? 2 : 3;
-  const rings: string[][] = Array.from({ length: ringCount }, () => []);
-  skills.forEach((s, i) => rings[i % ringCount].push(s));
+  // Always split skills into exactly 2 rings
+  const mid = Math.ceil(skills.length / 2);
+  const rings: string[][] = [skills.slice(0, mid), skills.slice(mid)];
 
-  // Ring configs (radius %, duration, direction)
-  const ringConfigs = [
-    { radius: 100, duration: 25, reverse: false },
-    { radius: 155, duration: 35, reverse: true },
-    { radius: 210, duration: 45, reverse: false },
-  ];
+  // Ring configs – 2 rings, smaller radii on mobile
+  const ringConfigs = isMobile
+    ? [
+        { radius: 70, duration: 25, reverse: false },
+        { radius: 115, duration: 35, reverse: true },
+      ]
+    : [
+        { radius: 100, duration: 25, reverse: false },
+        { radius: 155, duration: 35, reverse: true },
+      ];
 
   return (
     <div
       ref={containerRef}
-      className="relative w-full aspect-square max-w-[320px] mx-auto"
+      className="relative w-full aspect-square max-w-[260px] sm:max-w-[320px] mx-auto"
       aria-label="Skills visualisation"
     >
       {/* Centre core */}

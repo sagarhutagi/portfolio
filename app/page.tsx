@@ -87,12 +87,12 @@ export default async function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="px-6 py-14 md:py-20 md:pl-12 md:pr-8 max-w-4xl">
+      <div className="px-4 sm:px-6 py-10 md:py-20 md:pl-12 md:pr-8 max-w-4xl">
         {/* ── Hero ── */}
-        <section id="home" className="mb-20 scroll-mt-20">
-          <div className="flex items-start gap-6 mb-6">
+        <section id="home" className="mb-14 sm:mb-20 scroll-mt-20">
+          <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 mb-6">
             {/* Profile picture placeholder */}
-            <div className="shrink-0 w-20 h-20 md:w-24 md:h-24 border border-[var(--accent-color)]/40 flex items-center justify-center overflow-hidden bg-[var(--accent-color)]/5">
+            <div className="shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border border-[var(--accent-color)]/40 flex items-center justify-center overflow-hidden bg-[var(--accent-color)]/5">
               {s.profile_image_url ? (
                 <Image
                   src={s.profile_image_url}
@@ -107,7 +107,7 @@ export default async function HomePage() {
             </div>
             <div>
               <p className="text-xs text-muted-foreground mb-2">$ whoami</p>
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-1">
+              <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight mb-1">
                 {s.name}
               </h1>
               <p className="text-[var(--accent-color)]">{s.title}</p>
@@ -129,7 +129,7 @@ export default async function HomePage() {
         </section>
 
         {/* ── Skills & About side-by-side ── */}
-        <section className="mb-20 grid grid-cols-1 md:grid-cols-2 gap-12">
+        <section className="mb-14 sm:mb-20 grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
           {/* Skills — orbiting animation */}
           <div>
             <h2 className="text-xs text-[var(--accent-color)] mb-4">
@@ -150,8 +150,8 @@ export default async function HomePage() {
         </section>
 
         {/* ── Info cards ── */}
-        <section className="mb-20">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        <section className="mb-14 sm:mb-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
             <div className="p-4 border border-border">
               <p className="text-[10px] text-[var(--accent-color)] uppercase tracking-wider mb-1">location</p>
               <p className="text-sm">{s.location}</p>
@@ -172,8 +172,8 @@ export default async function HomePage() {
         </section>
 
         {/* ── Projects ── */}
-        <section id="projects" className="mb-20 scroll-mt-20">
-          <h2 className="text-xl font-bold tracking-tight mb-1">
+        <section id="projects" className="mb-14 sm:mb-20 scroll-mt-20">
+          <h2 className="text-base sm:text-xl font-bold tracking-tight mb-1">
             <span className="text-[var(--accent-color)] mr-2">$</span>ls ./projects
           </h2>
           <p className="text-xs text-muted-foreground mb-8">
@@ -183,19 +183,19 @@ export default async function HomePage() {
         </section>
 
         {/* ── Learnings ── */}
-        <section id="learnings" className="mb-20 scroll-mt-20">
-          <h2 className="text-xl font-bold tracking-tight mb-1">
+        <section id="learnings" className="mb-14 sm:mb-20 scroll-mt-20">
+          <h2 className="text-base sm:text-xl font-bold tracking-tight mb-1">
             <span className="text-[var(--accent-color)] mr-2">$</span>cat ./learnings
           </h2>
-          <p className="text-xs text-muted-foreground mb-8">
+          <p className="text-xs text-muted-foreground mb-6 sm:mb-8">
             Notes, insights, and things I&apos;ve picked up along the way.
           </p>
           <LearningsView learnings={learnings} />
         </section>
 
         {/* ── Experience ── */}
-        <section id="experience" className="mb-20 scroll-mt-20">
-          <h2 className="text-xl font-bold tracking-tight mb-1">
+        <section id="experience" className="mb-14 sm:mb-20 scroll-mt-20">
+          <h2 className="text-base sm:text-xl font-bold tracking-tight mb-1">
             <span className="text-[var(--accent-color)] mr-2">$</span>cat ./experience
           </h2>
           <p className="text-xs text-muted-foreground mb-8">
@@ -206,14 +206,14 @@ export default async function HomePage() {
 
         {/* ── Contact ── */}
         <section id="contact" className="mb-14 scroll-mt-20">
-          <h2 className="text-xl font-bold tracking-tight mb-1">
+          <h2 className="text-base sm:text-xl font-bold tracking-tight mb-1">
             <span className="text-[var(--accent-color)] mr-2">$</span>send --message
           </h2>
-          <p className="text-xs text-muted-foreground mb-8">
+          <p className="text-xs text-muted-foreground mb-6 sm:mb-8">
             Have a question or want to work together? Drop me a message.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
             <ContactForm />
 
             <div className="space-y-8">

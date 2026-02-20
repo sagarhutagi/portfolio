@@ -15,7 +15,7 @@ export function LearningCard({ learning, expanded, onToggle }: LearningCardProps
       {/* Header — always visible */}
       <button
         onClick={onToggle}
-        className="w-full text-left p-5 flex items-start justify-between gap-4"
+        className="w-full text-left p-4 sm:p-5 flex items-start justify-between gap-3 sm:gap-4"
         data-interactive
       >
         <div className="flex-1 min-w-0">
@@ -37,7 +37,7 @@ export function LearningCard({ learning, expanded, onToggle }: LearningCardProps
 
       {/* Expanded details */}
       {expanded && (
-        <div className="px-5 pb-5">
+        <div className="px-4 sm:px-5 pb-4 sm:pb-5">
           <div className="h-px bg-border mb-4" />
           <div className="text-xs text-foreground/80 whitespace-pre-line leading-relaxed">
             {learning.full_details}

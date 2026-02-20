@@ -12,7 +12,7 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
   return (
     <button
       onClick={onClick}
-      className="text-left w-full p-5 border border-border hover:border-[var(--accent-color)]/40 transition-colors duration-75 group"
+      className="text-left w-full p-4 sm:p-5 border border-border hover:border-[var(--accent-color)]/40 transition-colors duration-75 group"
       data-interactive
     >
       <h3 className="text-sm font-semibold text-foreground mb-2 group-hover:text-[var(--accent-color)] transition-colors">

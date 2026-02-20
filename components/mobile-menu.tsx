@@ -26,7 +26,7 @@ export function MobileMenu({ onClose }: MobileMenuProps) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-background flex flex-col items-start justify-center gap-6 px-8">
+    <div className="fixed inset-0 z-50 bg-background flex flex-col items-start justify-center gap-5 px-6 sm:px-8">
       {/* Close button */}
       <button
         onClick={onClose}
@@ -44,7 +44,7 @@ export function MobileMenu({ onClose }: MobileMenuProps) {
         <button
           key={link.href}
           onClick={() => scrollTo(link.href)}
-          className="text-lg font-medium text-foreground hover:text-[var(--accent-color)] transition-colors"
+          className="text-base sm:text-lg font-medium text-foreground hover:text-[var(--accent-color)] transition-colors"
           data-interactive
         >
           <span className="text-[var(--accent-color)] mr-2">▸</span>

@@ -24,7 +24,7 @@ export function ExperienceCard({ experience, isLast }: ExperienceCardProps) {
   const isCurrent = !experience.end_date;
 
   return (
-    <div className="relative flex gap-5">
+    <div className="relative flex gap-3 sm:gap-5">
       {/* Timeline line + dot */}
       <div className="flex flex-col items-center">
         <div
