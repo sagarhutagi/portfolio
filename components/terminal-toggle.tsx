@@ -21,6 +21,18 @@ const MIN_W = 380;
 const MIN_H = 220;
 const EDGE_PX = 6; // invisible hit area thickness
 
+/** Detect small-screen / touch devices */
+function useIsMobile() {
+  const [mobile, setMobile] = useState(false);
+  useEffect(() => {
+    const check = () => setMobile(window.innerWidth < 640);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+  return mobile;
+}
+
 /* Cursor CSS values for edges */
 const EDGE_CURSOR_CSS: Record<string, string> = {
   n: "n-resize",
@@ -61,6 +73,7 @@ export function TerminalToggle({
   const [minimized, setMinimized] = useState(false);
   const [maximized, setMaximized] = useState(false);
   const [terminalKey, setTerminalKey] = useState(0);
+  const isMobile = useIsMobile();
 
   /* Window position & size */
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -77,16 +90,24 @@ export function TerminalToggle({
   /* Pre-maximize snapshot for restore */
   const preMaxState = useRef({ x: 0, y: 0, width: 650, height: 420 });
 
-  /* Initialise position to bottom-right on first open */
+  /* Initialise position to bottom-right on first open (desktop only) */
   useEffect(() => {
-    if (open && !initialized && !minimized) {
+    if (open && !initialized && !minimized && !isMobile) {
       const x = window.innerWidth - 650 - 20;
       const y = window.innerHeight - 420 - 20;
       setPosition({ x: Math.max(0, x), y: Math.max(0, y) });
       setSize({ width: 650, height: 420 });
       setInitialized(true);
     }
-  }, [open, initialized, minimized]);
+  }, [open, initialized, minimized, isMobile]);
+
+  /* Lock body scroll when terminal is open on mobile */
+  useEffect(() => {
+    if (open && !minimized && isMobile) {
+      document.body.style.overflow = "hidden";
+      return () => { document.body.style.overflow = ""; };
+    }
+  }, [open, minimized, isMobile]);
 
   /* ── Close: unmount + reset so next open starts fresh ── */
   const handleClose = useCallback(() => {
@@ -276,16 +297,20 @@ export function TerminalToggle({
       {open && !minimized && (
         <div
           ref={windowRef}
-          className="fixed z-50 flex flex-col shadow-2xl select-none"
+          className={`fixed z-50 flex flex-col shadow-2xl select-none ${
+            isMobile ? "inset-0" : ""
+          }`}
           style={
-            maximized
-              ? { left: 0, top: 0, width: "100vw", height: "100vh" }
-              : {
-                  left: position.x,
-                  top: position.y,
-                  width: size.width,
-                  height: size.height,
-                }
+            isMobile
+              ? { left: 0, top: 0, width: "100vw", height: "100dvh" }
+              : maximized
+                ? { left: 0, top: 0, width: "100vw", height: "100vh" }
+                : {
+                    left: position.x,
+                    top: position.y,
+                    width: size.width,
+                    height: size.height,
+                  }
           }
         >
           <InteractiveTerminal
@@ -304,8 +329,8 @@ export function TerminalToggle({
             onTitleBarDoubleClick={handleTitleBarDoubleClick}
           />
 
-          {/* ── Invisible resize edges & corners ── */}
-          {!maximized && (
+          {/* ── Invisible resize edges & corners (desktop only) ── */}
+          {!maximized && !isMobile && (
             <>
               {(["n", "s", "e", "w", "ne", "nw", "se", "sw"] as const).map(
                 (edge) => (

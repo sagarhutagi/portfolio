@@ -619,10 +619,11 @@ export function InteractiveTerminal({
     <div
       className="border border-border bg-[hsl(var(--card))] flex flex-col flex-1 min-h-0 overflow-hidden"
       onClick={() => inputRef.current?.focus()}
+      onTouchEnd={() => inputRef.current?.focus()}
     >
-      {/* Title bar — draggable area */}
+      {/* Title bar — draggable area (drag disabled on mobile) */}
       <div
-        className="flex items-center justify-between px-3 py-2 border-b border-border bg-background/60 shrink-0 cursor-grab active:cursor-grabbing"
+        className="flex items-center justify-between px-3 py-2 sm:py-2 border-b border-border bg-background/60 shrink-0 cursor-grab active:cursor-grabbing"
         onMouseDown={onTitleBarMouseDown}
         onDoubleClick={onTitleBarDoubleClick}
       >
@@ -630,7 +631,7 @@ export function InteractiveTerminal({
         <div className="flex items-center gap-2 select-none pointer-events-none">
           <span className="font-mono text-xs font-bold text-[var(--accent-color)]">&gt;_</span>
           <span className="text-[11px] text-muted-foreground">
-            terminal — visitor@portfolio
+            terminal
           </span>
         </div>
 
@@ -639,7 +640,7 @@ export function InteractiveTerminal({
           {/* Minimize */}
           <button
             onClick={(e) => { e.stopPropagation(); onMinimize?.(); }}
-            className="w-7 h-6 flex items-center justify-center text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors"
+            className="hidden sm:flex w-7 h-6 items-center justify-center text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors"
             aria-label="Minimize terminal"
             data-interactive
           >
@@ -650,7 +651,7 @@ export function InteractiveTerminal({
           {/* Maximize / Restore */}
           <button
             onClick={(e) => { e.stopPropagation(); onMaximize?.(); }}
-            className="w-7 h-6 flex items-center justify-center text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors"
+            className="hidden sm:flex w-7 h-6 items-center justify-center text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors"
             aria-label={maximized ? "Restore terminal" : "Maximize terminal"}
             data-interactive
           >
@@ -668,7 +669,7 @@ export function InteractiveTerminal({
           {/* Close */}
           <button
             onClick={(e) => { e.stopPropagation(); onClose?.(); }}
-            className="w-7 h-6 flex items-center justify-center text-muted-foreground hover:bg-red-500 hover:text-white transition-colors"
+            className="w-8 h-7 sm:w-7 sm:h-6 flex items-center justify-center text-muted-foreground hover:bg-red-500 hover:text-white transition-colors"
             aria-label="Close terminal"
             data-interactive
           >
@@ -698,9 +699,12 @@ export function InteractiveTerminal({
 
       {/* Input line */}
       {!minimized && (
-        <div className="flex items-center gap-2 px-4 py-3 border-t border-border bg-background/30 shrink-0">
-          <span className="text-[var(--accent-color)] text-xs shrink-0">
+        <div className="flex items-center gap-2 px-3 sm:px-4 py-3 sm:py-3 border-t border-border bg-background/30 shrink-0">
+          <span className="text-[var(--accent-color)] text-xs shrink-0 hidden sm:inline">
             {PROMPT}
+          </span>
+          <span className="text-[var(--accent-color)] text-xs shrink-0 sm:hidden">
+            $
           </span>
           <input
             ref={inputRef}

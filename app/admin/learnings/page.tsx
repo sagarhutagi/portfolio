@@ -122,8 +122,8 @@ export default function AdminLearningsPage() {
 
   return (
     <div className="max-w-3xl">
-      <div className="flex items-center justify-between mb-8">
-        <div>
+      <div className="flex items-center justify-between mb-8 gap-4">
+        <div className="min-w-0">
           <h1 className="text-2xl font-bold mb-1">Learnings</h1>
           <p className="text-sm text-muted-foreground">
             Manage your learning notes. Drag to reorder.
@@ -203,7 +203,7 @@ export default function AdminLearningsPage() {
       {/* ── Editor Panel ── */}
       {editing && (
         <div className="fixed inset-0 z-50 bg-background overflow-y-auto">
-          <div className="max-w-2xl mx-auto px-6 py-12">
+          <div className="max-w-2xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-xl font-bold">
                 {editing && "id" in editing && editing.id

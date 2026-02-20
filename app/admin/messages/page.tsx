@@ -5,7 +5,7 @@ import { supabase } from "@/lib/supabase";
 import { markMessageRead } from "@/lib/actions";
 import { toast } from "sonner";
 import type { ContactSubmission } from "@/types";
-import { Mail, MailOpen } from "lucide-react";
+import { Mail, MailOpen, ArrowLeft } from "lucide-react";
 
 export default function AdminMessagesPage() {
   const [messages, setMessages] = useState<ContactSubmission[]>([]);
@@ -42,6 +42,39 @@ export default function AdminMessagesPage() {
     }
   };
 
+  /* Message detail — shared between desktop inline & mobile overlay */
+  const messageDetail = selected ? (
+    <div className="p-4 sm:p-6 bg-card rounded-sm">
+      {/* Back button — mobile only */}
+      <button
+        onClick={() => setSelected(null)}
+        className="md:hidden flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-4"
+        data-interactive
+      >
+        <ArrowLeft size={14} /> Back to messages
+      </button>
+
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-4">
+        <div>
+          <p className="font-semibold">{selected.name}</p>
+          <a
+            href={`mailto:${selected.email}`}
+            className="text-sm text-[var(--accent-color)] hover:underline"
+            data-interactive
+          >
+            {selected.email}
+          </a>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          {new Date(selected.created_at).toLocaleString()}
+        </p>
+      </div>
+      <div className="text-sm leading-relaxed whitespace-pre-line">
+        {selected.message}
+      </div>
+    </div>
+  ) : null;
+
   return (
     <div className="max-w-4xl">
       <h1 className="text-2xl font-bold mb-1">Messages</h1>
@@ -54,71 +87,89 @@ export default function AdminMessagesPage() {
           No messages yet.
         </p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {/* ── Message List ── */}
-          <div className="md:col-span-1 space-y-1 max-h-[70vh] overflow-y-auto">
-            {messages.map((msg) => (
-              <button
-                key={msg.id}
-                onClick={() => {
-                  setSelected(msg);
-                  handleMarkRead(msg);
-                }}
-                className={`w-full text-left p-3 rounded-sm transition-colors duration-75 ${
-                  selected?.id === msg.id
-                    ? "bg-muted"
-                    : "hover:bg-muted/50"
-                }`}
-                data-interactive
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  {msg.is_read ? (
-                    <MailOpen size={12} className="text-muted-foreground" />
-                  ) : (
-                    <Mail size={12} className="text-[var(--accent-color)]" />
-                  )}
-                  <p className="text-sm font-medium truncate">{msg.name}</p>
+        <>
+          {/* ── Desktop: side-by-side layout ── */}
+          <div className="hidden md:grid md:grid-cols-3 gap-4">
+            {/* Message List */}
+            <div className="md:col-span-1 space-y-1 max-h-[70vh] overflow-y-auto">
+              {messages.map((msg) => (
+                <button
+                  key={msg.id}
+                  onClick={() => {
+                    setSelected(msg);
+                    handleMarkRead(msg);
+                  }}
+                  className={`w-full text-left p-3 rounded-sm transition-colors duration-75 ${
+                    selected?.id === msg.id
+                      ? "bg-muted"
+                      : "hover:bg-muted/50"
+                  }`}
+                  data-interactive
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    {msg.is_read ? (
+                      <MailOpen size={12} className="text-muted-foreground" />
+                    ) : (
+                      <Mail size={12} className="text-[var(--accent-color)]" />
+                    )}
+                    <p className="text-sm font-medium truncate">{msg.name}</p>
+                  </div>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {msg.email}
+                  </p>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    {new Date(msg.created_at).toLocaleDateString()}
+                  </p>
+                </button>
+              ))}
+            </div>
+
+            {/* Message Detail */}
+            <div className="md:col-span-2">
+              {messageDetail ?? (
+                <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
+                  Select a message to view.
                 </div>
-                <p className="text-xs text-muted-foreground truncate">
-                  {msg.email}
-                </p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  {new Date(msg.created_at).toLocaleDateString()}
-                </p>
-              </button>
-            ))}
+              )}
+            </div>
           </div>
 
-          {/* ── Message Detail ── */}
-          <div className="md:col-span-2">
+          {/* ── Mobile: list or detail ── */}
+          <div className="md:hidden">
             {selected ? (
-              <div className="p-6 bg-card rounded-sm">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <p className="font-semibold">{selected.name}</p>
-                    <a
-                      href={`mailto:${selected.email}`}
-                      className="text-sm text-[var(--accent-color)] hover:underline"
-                      data-interactive
-                    >
-                      {selected.email}
-                    </a>
-                  </div>
-                  <p className="text-xs text-muted-foreground">
-                    {new Date(selected.created_at).toLocaleString()}
-                  </p>
-                </div>
-                <div className="text-sm leading-relaxed whitespace-pre-line">
-                  {selected.message}
-                </div>
-              </div>
+              messageDetail
             ) : (
-              <div className="flex items-center justify-center h-full text-sm text-muted-foreground">
-                Select a message to view.
+              <div className="space-y-1">
+                {messages.map((msg) => (
+                  <button
+                    key={msg.id}
+                    onClick={() => {
+                      setSelected(msg);
+                      handleMarkRead(msg);
+                    }}
+                    className="w-full text-left p-3 rounded-sm hover:bg-muted/50 transition-colors duration-75"
+                    data-interactive
+                  >
+                    <div className="flex items-center gap-2 mb-1">
+                      {msg.is_read ? (
+                        <MailOpen size={12} className="text-muted-foreground" />
+                      ) : (
+                        <Mail size={12} className="text-[var(--accent-color)]" />
+                      )}
+                      <p className="text-sm font-medium truncate">{msg.name}</p>
+                    </div>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {msg.email}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {new Date(msg.created_at).toLocaleDateString()}
+                    </p>
+                  </button>
+                ))}
               </div>
             )}
           </div>
-        </div>
+        </>
       )}
     </div>
   );
