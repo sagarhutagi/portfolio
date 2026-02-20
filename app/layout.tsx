@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LayoutShell } from "@/components/layout-shell";
 import { CustomCursor } from "@/components/custom-cursor";
@@ -10,6 +10,11 @@ import "./globals.css";
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+});
+
+const sans = Inter({
+  subsets: ["latin"],
+  variable: "--font-sans",
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
@@ -59,7 +64,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${mono.variable} font-mono antialiased`}>
+      <body className={`${mono.variable} ${sans.variable} font-mono antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"

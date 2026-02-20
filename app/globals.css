@@ -12,8 +12,8 @@ html {
 
 @layer base {
   :root {
-    /* Accent color — terminal green */
-    --accent-color: #4ade80;
+    /* Accent color — darker green for light mode contrast */
+    --accent-color: #16a34a;
 
     --background: 0 0% 100%;
     --foreground: 0 0% 6%;
@@ -21,19 +21,19 @@ html {
     --card-foreground: 0 0% 6%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 6%;
-    --primary: 142 69% 58%;
+    --primary: 142 72% 36%;
     --primary-foreground: 0 0% 100%;
     --secondary: 0 0% 95%;
     --secondary-foreground: 0 0% 15%;
     --muted: 0 0% 95%;
-    --muted-foreground: 0 0% 45%;
+    --muted-foreground: 0 0% 38%;
     --accent: 0 0% 95%;
     --accent-foreground: 0 0% 15%;
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 85%;
-    --input: 0 0% 85%;
-    --ring: 142 69% 58%;
+    --border: 0 0% 80%;
+    --input: 0 0% 80%;
+    --ring: 142 72% 36%;
     --radius: 0rem;
   }
 
@@ -75,6 +75,11 @@ html {
     background: rgba(74, 222, 128, 0.25);
     color: inherit;
   }
+
+  /* Smoother link / interactive transitions globally */
+  a, button {
+    transition-duration: 200ms;
+  }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -86,6 +91,17 @@ html {
   * {
     cursor: none !important;
   }
+
+  /* Override: show native cursor during terminal resize/drag */
+  body.terminal-resizing *,
+  body.terminal-resizing {
+    cursor: inherit !important;
+  }
+}
+
+/* Hide custom cursor during resize/drag */
+body.terminal-resizing .custom-cursor {
+  display: none !important;
 }
 
 .custom-cursor {
@@ -164,47 +180,114 @@ html {
 }
 
 /* ═══════════════════════════════════════════════════
-   WASM TERMINAL (xterm.js overrides)
+   FOCUS-VISIBLE (accessibility)
    ═══════════════════════════════════════════════════ */
 
-.wasm-xterm-host {
-  overflow: hidden;
+:focus-visible {
+  outline: 2px solid var(--accent-color);
+  outline-offset: 2px;
 }
 
-.wasm-xterm-host .xterm {
-  height: 100%;
-  padding: 4px;
+/* ═══════════════════════════════════════════════════
+   HERO AMBIENT GLOW
+   ═══════════════════════════════════════════════════ */
+
+.hero-glow {
+  position: absolute;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
+  opacity: 0.04;
+  filter: blur(80px);
+  pointer-events: none;
+  top: -60px;
+  left: -40px;
 }
 
-.wasm-xterm-host .xterm-viewport {
-  background-color: transparent !important;
-  overflow-y: auto !important;
+.dark .hero-glow {
+  opacity: 0.07;
 }
 
-.wasm-xterm-host .xterm-viewport::-webkit-scrollbar {
-  width: 4px;
+/* ═══════════════════════════════════════════════════
+   SECTION DIVIDER
+   ═══════════════════════════════════════════════════ */
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-color) 50%,
+    transparent 100%
+  );
+  opacity: 0.3;
+  margin-bottom: 3rem;
 }
 
-.wasm-xterm-host .xterm-viewport::-webkit-scrollbar-track {
-  background: transparent;
+/* ═══════════════════════════════════════════════════
+   INFO CARD HOVER
+   ═══════════════════════════════════════════════════ */
+
+.info-card {
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.wasm-xterm-host .xterm-viewport::-webkit-scrollbar-thumb {
-  background: hsl(var(--border));
-  border-radius: 2px;
+.info-card:hover {
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(74, 222, 128, 0.06);
 }
 
-.wasm-xterm-host .xterm-screen {
-  height: 100% !important;
+.dark .info-card:hover {
+  box-shadow: 0 4px 20px rgba(74, 222, 128, 0.08);
 }
 
-/* Make sure the xterm cursor stays visible */
-.wasm-xterm-host .xterm-cursor-layer {
-  z-index: 10;
+/* ═══════════════════════════════════════════════════
+   PROJECT CARD HOVER ENHANCEMENTS
+   ═══════════════════════════════════════════════════ */
+
+.project-card-enhanced {
+  transition: border-color 0.15s ease, transform 0.2s ease, box-shadow 0.25s ease;
 }
 
-/* Disable the global custom cursor inside xterm */
-.wasm-xterm-host,
-.wasm-xterm-host * {
-  cursor: text !important;
+.project-card-enhanced:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(74, 222, 128, 0.05);
+}
+
+.dark .project-card-enhanced:hover {
+  box-shadow: 0 8px 30px rgba(74, 222, 128, 0.07);
+}
+
+/* ═══════════════════════════════════════════════════
+   LEARNING CARD HOVER ENHANCEMENTS
+   ═══════════════════════════════════════════════════ */
+
+.learning-card-enhanced {
+  transition: border-color 0.15s ease, transform 0.2s ease, box-shadow 0.25s ease;
+}
+
+.learning-card-enhanced:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(74, 222, 128, 0.04);
+}
+
+.dark .learning-card-enhanced:hover {
+  box-shadow: 0 6px 24px rgba(74, 222, 128, 0.06);
+}
+
+/* ═══════════════════════════════════════════════════
+   FOOTER GRADIENT LINE
+   ═══════════════════════════════════════════════════ */
+
+.footer-gradient-line {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-color) 50%,
+    transparent 100%
+  );
+  opacity: 0.3;
 }

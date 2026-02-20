@@ -28,9 +28,9 @@ export function ExperienceCard({ experience, isLast }: ExperienceCardProps) {
       {/* Timeline line + dot */}
       <div className="flex flex-col items-center">
         <div
-          className={`w-3 h-3 rounded-full shrink-0 mt-1.5 border-2 ${
+          className={`w-3 h-3 rounded-full shrink-0 mt-1.5 border-2 transition-colors duration-300 ${
             isCurrent
-              ? "border-[var(--accent-color)] bg-[var(--accent-color)]/30"
+              ? "border-[var(--accent-color)] bg-[var(--accent-color)]/30 shadow-[0_0_8px_rgba(74,222,128,0.3)]"
               : "border-muted-foreground/40 bg-background"
           }`}
         />

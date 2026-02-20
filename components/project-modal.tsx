@@ -42,32 +42,36 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         </h1>
 
         {/* ── Overview ── */}
-        <section className="mb-10">
-          <h2 className="text-xs text-[var(--accent-color)] mb-4">
-            <span className="text-muted-foreground">// </span>overview
-          </h2>
-          <div className="text-sm text-foreground/80 whitespace-pre-line leading-relaxed">
-            {project.long_desc}
-          </div>
-        </section>
+        {project.long_desc && (
+          <section className="mb-10">
+            <h2 className="text-xs text-[var(--accent-color)] mb-4">
+              <span className="text-muted-foreground">// </span>overview
+            </h2>
+            <div className="text-sm text-foreground/80 whitespace-pre-line leading-relaxed">
+              {project.long_desc}
+            </div>
+          </section>
+        )}
 
         {/* ── Tech Stack ── */}
-        <section className="mb-10">
-          <h2 className="text-xs text-[var(--accent-color)] mb-4">
-            <span className="text-muted-foreground">// </span>tech_stack
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {project.tech.map((t) => (
-              <Badge
-                key={t}
-                variant="default"
-                className="text-xs px-2.5 py-1"
-              >
-                {t}
-              </Badge>
-            ))}
-          </div>
-        </section>
+        {project.tech.length > 0 && (
+          <section className="mb-10">
+            <h2 className="text-xs text-[var(--accent-color)] mb-4">
+              <span className="text-muted-foreground">// </span>tech_stack
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {project.tech.map((t) => (
+                <Badge
+                  key={t}
+                  variant="default"
+                  className="text-xs px-2.5 py-1"
+                >
+                  {t}
+                </Badge>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* ── Screenshots ── */}
         {project.screenshots.length > 0 && (
@@ -95,33 +99,39 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
         )}
 
         {/* ── Links ── */}
-        <section className="mb-10">
-          <h2 className="text-xs text-[var(--accent-color)] mb-4">
-            <span className="text-muted-foreground">// </span>links
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            <Button asChild>
-              <a
-                href={project.live_url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <ExternalLink size={14} className="mr-2" />
-                Live Demo
-              </a>
-            </Button>
-            <Button variant="secondary" asChild>
-              <a
-                href={project.github_url}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <Github size={14} className="mr-2" />
-                GitHub
-              </a>
-            </Button>
-          </div>
-        </section>
+        {(project.live_url || project.github_url) && (
+          <section className="mb-10">
+            <h2 className="text-xs text-[var(--accent-color)] mb-4">
+              <span className="text-muted-foreground">// </span>links
+            </h2>
+            <div className="flex flex-wrap gap-3">
+              {project.live_url && (
+                <Button asChild>
+                  <a
+                    href={project.live_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <ExternalLink size={14} className="mr-2" />
+                    Live Demo
+                  </a>
+                </Button>
+              )}
+              {project.github_url && (
+                <Button variant="secondary" asChild>
+                  <a
+                    href={project.github_url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Github size={14} className="mr-2" />
+                    GitHub
+                  </a>
+                </Button>
+              )}
+            </div>
+          </section>
+        )}
 
         {/* Back link */}
         <button

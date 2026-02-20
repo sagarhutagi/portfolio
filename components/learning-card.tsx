@@ -11,7 +11,7 @@ interface LearningCardProps {
 
 export function LearningCard({ learning, expanded, onToggle }: LearningCardProps) {
   return (
-    <div className="border border-border hover:border-[var(--accent-color)]/40 transition-colors duration-75">
+    <div className="learning-card-enhanced border border-border hover:border-[var(--accent-color)]/40 transition-colors duration-75">
       {/* Header — always visible */}
       <button
         onClick={onToggle}

@@ -20,8 +20,10 @@ interface TerminalProps {
   onClose?: () => void;
   onMinimize?: () => void;
   onMaximize?: () => void;
-  onWasm?: () => void;
   minimized?: boolean;
+  maximized?: boolean;
+  onTitleBarMouseDown?: (e: React.MouseEvent) => void;
+  onTitleBarDoubleClick?: () => void;
 }
 
 /* ── Helpers ── */
@@ -67,11 +69,6 @@ Available commands:
   clear           Clear the terminal
   exit            Close the terminal
   help            Show this help message
-
-  Advanced
-  -----------------------------------
-  wasm            Launch real WASM shell
-                  (xterm.js + virtual filesystem)
 `.trim();
 
 const ASCII_BANNER = `
@@ -92,8 +89,10 @@ export function InteractiveTerminal({
   onClose,
   onMinimize,
   onMaximize,
-  onWasm,
   minimized = false,
+  maximized = false,
+  onTitleBarMouseDown,
+  onTitleBarDoubleClick,
 }: TerminalProps) {
   const { theme, setTheme } = useTheme();
   const [lines, setLines] = useState<Line[]>([
@@ -560,14 +559,6 @@ export function InteractiveTerminal({
           });
           break;
 
-        case "wasm":
-          push(
-            { type: "accent", text: "Launching WASM shell..." },
-            { type: "muted", text: "Loading xterm.js + virtual filesystem..." }
-          );
-          setTimeout(() => onWasm?.(), 300);
-          break;
-
         case "exit":
         case "quit":
           push({ type: "muted", text: "Closing terminal..." });
@@ -581,7 +572,7 @@ export function InteractiveTerminal({
           });
       }
     },
-    [push, settings, projects, learnings, socials, history, theme, setTheme, cwd, onClose, onWasm]
+    [push, settings, projects, learnings, socials, history, theme, setTheme, cwd, onClose]
   );
 
   /* ── Key handling ── */
@@ -629,35 +620,63 @@ export function InteractiveTerminal({
       className="border border-border bg-[hsl(var(--card))] flex flex-col flex-1 min-h-0 overflow-hidden"
       onClick={() => inputRef.current?.focus()}
     >
-      {/* Title bar */}
-      <div className="flex items-center gap-2 px-4 py-2 border-b border-border bg-background/50 shrink-0">
-        <button
-          onClick={(e) => { e.stopPropagation(); onClose?.(); }}
-          className="w-2.5 h-2.5 rounded-full bg-red-500/70 hover:bg-red-500 transition-colors focus:outline-none group relative"
-          aria-label="Close terminal"
-          data-interactive
-        >
-          <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold text-black/0 group-hover:text-black/80 transition-colors">✕</span>
-        </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); onMinimize?.(); }}
-          className="w-2.5 h-2.5 rounded-full bg-yellow-500/70 hover:bg-yellow-500 transition-colors focus:outline-none group relative"
-          aria-label="Minimize terminal"
-          data-interactive
-        >
-          <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold text-black/0 group-hover:text-black/80 transition-colors">−</span>
-        </button>
-        <button
-          onClick={(e) => { e.stopPropagation(); onMaximize?.(); }}
-          className="w-2.5 h-2.5 rounded-full bg-green-500/70 hover:bg-green-500 transition-colors focus:outline-none group relative"
-          aria-label="Maximize terminal"
-          data-interactive
-        >
-          <span className="absolute inset-0 flex items-center justify-center text-[7px] font-bold text-black/0 group-hover:text-black/80 transition-colors">⤢</span>
-        </button>
-        <span className="text-[10px] text-muted-foreground ml-2">
-          terminal — visitor@portfolio
-        </span>
+      {/* Title bar — draggable area */}
+      <div
+        className="flex items-center justify-between px-3 py-2 border-b border-border bg-background/60 shrink-0 cursor-grab active:cursor-grabbing"
+        onMouseDown={onTitleBarMouseDown}
+        onDoubleClick={onTitleBarDoubleClick}
+      >
+        {/* Left: logo + title */}
+        <div className="flex items-center gap-2 select-none pointer-events-none">
+          <span className="font-mono text-xs font-bold text-[var(--accent-color)]">&gt;_</span>
+          <span className="text-[11px] text-muted-foreground">
+            terminal — visitor@portfolio
+          </span>
+        </div>
+
+        {/* Right: window controls */}
+        <div className="flex items-center gap-0.5">
+          {/* Minimize */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onMinimize?.(); }}
+            className="w-7 h-6 flex items-center justify-center text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors"
+            aria-label="Minimize terminal"
+            data-interactive
+          >
+            <svg viewBox="0 0 16 16" className="w-3 h-3" fill="currentColor">
+              <rect x="3" y="7.5" width="10" height="1" />
+            </svg>
+          </button>
+          {/* Maximize / Restore */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onMaximize?.(); }}
+            className="w-7 h-6 flex items-center justify-center text-muted-foreground hover:bg-muted/60 hover:text-foreground transition-colors"
+            aria-label={maximized ? "Restore terminal" : "Maximize terminal"}
+            data-interactive
+          >
+            {maximized ? (
+              <svg viewBox="0 0 16 16" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="1.2">
+                <rect x="1.5" y="3.5" width="9" height="9" rx="0.5" />
+                <path d="M5.5 3.5V1.5h9v9h-2" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 16 16" className="w-3 h-3" fill="none" stroke="currentColor" strokeWidth="1.2">
+                <rect x="2" y="2" width="12" height="12" rx="0.5" />
+              </svg>
+            )}
+          </button>
+          {/* Close */}
+          <button
+            onClick={(e) => { e.stopPropagation(); onClose?.(); }}
+            className="w-7 h-6 flex items-center justify-center text-muted-foreground hover:bg-red-500 hover:text-white transition-colors"
+            aria-label="Close terminal"
+            data-interactive
+          >
+            <svg viewBox="0 0 16 16" className="w-3 h-3" fill="currentColor">
+              <path d="M3.5 3.5l9 9m0-9l-9 9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+            </svg>
+          </button>
+        </div>
       </div>
 
       {/* Output area */}
@@ -689,7 +708,7 @@ export function InteractiveTerminal({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKey}
-            className="flex-1 bg-transparent text-xs text-foreground outline-none caret-[var(--accent-color)]"
+            className="flex-1 bg-transparent text-xs text-foreground outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0 caret-[var(--accent-color)] border-none"
             spellCheck={false}
             autoComplete="off"
             data-interactive

@@ -42,7 +42,7 @@ const config: Config = {
       },
       fontFamily: {
         mono: ["var(--font-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
-        sans: ["var(--font-mono)", "ui-monospace", "monospace"],
+        sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
         heading: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       borderRadius: {

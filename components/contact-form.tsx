@@ -93,8 +93,12 @@ export function ContactForm() {
       </div>
 
       {/* Submit */}
-      <Button type="submit" disabled={submitting}>
-        <Send size={16} className="mr-2" />
+      <Button 
+        type="submit" 
+        disabled={submitting}
+        className="group"
+      >
+        <Send size={16} className="mr-2 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
         {submitting ? "Sending…" : "Send Message"}
       </Button>
     </form>
