@@ -9,6 +9,7 @@ export const contentType = "image/png";
 
 export default async function TwitterImage() {
   const s = await getSettings();
+  const profileImg = s.profile_image_url;
 
   return new ImageResponse(
     (
@@ -24,30 +25,34 @@ export default async function TwitterImage() {
           overflow: "hidden",
         }}
       >
-        {/* Grid pattern */}
+        {/* Profile image as blurred background */}
+        {profileImg && (
+          <img
+            src={profileImg}
+            alt=""
+            width={1200}
+            height={630}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              filter: "blur(30px) brightness(0.25)",
+              transform: "scale(1.2)",
+            }}
+          />
+        )}
+
+        {/* Dark overlay */}
         <div
           style={{
             position: "absolute",
             inset: 0,
             display: "flex",
-            opacity: 0.06,
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-
-        {/* Accent glow */}
-        <div
-          style={{
-            position: "absolute",
-            top: -120,
-            right: -120,
-            width: 400,
-            height: 400,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)",
-            display: "flex",
+            background:
+              "linear-gradient(135deg, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.7) 50%, rgba(10,10,10,0.9) 100%)",
           }}
         />
 
@@ -87,7 +92,7 @@ export default async function TwitterImage() {
             <span style={{ fontSize: 26, color: "#a1a1aa" }}>{s.title}</span>
           </div>
 
-          <p style={{ fontSize: 20, color: "#71717a", marginTop: 20, lineHeight: 1.5, maxWidth: 700 }}>
+          <p style={{ fontSize: 20, color: "#d4d4d8", marginTop: 20, lineHeight: 1.5, maxWidth: 700 }}>
             {s.intro}
           </p>
 
@@ -99,8 +104,8 @@ export default async function TwitterImage() {
                 style={{
                   padding: "6px 14px",
                   borderRadius: 6,
-                  backgroundColor: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  backgroundColor: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.12)",
                   color: "#d4d4d8",
                   fontSize: 15,
                   display: "flex",

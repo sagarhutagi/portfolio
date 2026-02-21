@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "images.unsplash.com" },
       { protocol: "https", hostname: "fastly.picsum.photos" },
       { protocol: "https", hostname: "media.licdn.com" },
+      { protocol: "https", hostname: "**.supabase.co" },
     ],
   },
 };

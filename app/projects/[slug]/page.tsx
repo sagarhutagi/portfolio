@@ -29,6 +29,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
   const title = `${project.title} — ${settings.name}`;
   const description = project.short_desc;
+  const ogImageUrl = `${siteUrl}/projects/${slug}/opengraph-image`;
 
   return {
     title: project.title,
@@ -40,7 +41,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: "article",
       images: [
         {
-          url: `/projects/${slug}/opengraph-image`,
+          url: ogImageUrl,
           width: 1200,
           height: 630,
           alt: title,
@@ -51,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       card: "summary_large_image",
       title,
       description,
-      images: [`/projects/${slug}/opengraph-image`],
+      images: [ogImageUrl],
     },
   };
 }

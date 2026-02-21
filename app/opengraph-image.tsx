@@ -11,6 +11,7 @@ export default async function OgImage() {
   const s = await getSettings();
 
   const skills = s.skills.slice(0, 6);
+  const profileImg = s.profile_image_url;
 
   return new ImageResponse(
     (
@@ -26,44 +27,34 @@ export default async function OgImage() {
           overflow: "hidden",
         }}
       >
-        {/* Background grid pattern */}
+        {/* Profile image as blurred background */}
+        {profileImg && (
+          <img
+            src={profileImg}
+            alt=""
+            width={1200}
+            height={630}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              filter: "blur(30px) brightness(0.25)",
+              transform: "scale(1.2)",
+            }}
+          />
+        )}
+
+        {/* Dark overlay */}
         <div
           style={{
             position: "absolute",
             inset: 0,
             display: "flex",
-            opacity: 0.06,
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-
-        {/* Accent glow */}
-        <div
-          style={{
-            position: "absolute",
-            top: -120,
-            right: -120,
-            width: 400,
-            height: 400,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)",
-            display: "flex",
-          }}
-        />
-
-        {/* Bottom-left glow */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: -80,
-            left: -80,
-            width: 300,
-            height: 300,
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%)",
-            display: "flex",
+            background:
+              "linear-gradient(135deg, rgba(10,10,10,0.9) 0%, rgba(10,10,10,0.7) 50%, rgba(10,10,10,0.9) 100%)",
           }}
         />
 
@@ -135,7 +126,7 @@ export default async function OgImage() {
           <p
             style={{
               fontSize: 20,
-              color: "#71717a",
+              color: "#d4d4d8",
               marginTop: 20,
               lineHeight: 1.5,
               maxWidth: 700,
@@ -159,8 +150,8 @@ export default async function OgImage() {
                 style={{
                   padding: "8px 16px",
                   borderRadius: 6,
-                  backgroundColor: "rgba(255,255,255,0.06)",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  backgroundColor: "rgba(255,255,255,0.08)",
+                  border: "1px solid rgba(255,255,255,0.12)",
                   color: "#d4d4d8",
                   fontSize: 16,
                   display: "flex",
@@ -179,13 +170,13 @@ export default async function OgImage() {
               justifyContent: "space-between",
               marginTop: "auto",
               paddingTop: 24,
-              borderTop: "1px solid rgba(255,255,255,0.08)",
+              borderTop: "1px solid rgba(255,255,255,0.1)",
             }}
           >
-            <span style={{ color: "#52525b", fontSize: 16 }}>
+            <span style={{ color: "#71717a", fontSize: 16 }}>
               {s.location}
             </span>
-            <span style={{ color: "#52525b", fontSize: 16 }}>
+            <span style={{ color: "#71717a", fontSize: 16 }}>
               {s.email}
             </span>
           </div>

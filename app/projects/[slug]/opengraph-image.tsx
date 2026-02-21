@@ -46,6 +46,7 @@ export default async function ProjectOgImage({
     );
   }
 
+  const thumb = project.screenshots?.[0];
   const techTags = project.tech.slice(0, 5);
 
   return new ImageResponse(
@@ -62,46 +63,34 @@ export default async function ProjectOgImage({
           overflow: "hidden",
         }}
       >
-        {/* Grid pattern */}
+        {/* Screenshot as blurred background */}
+        {thumb && (
+          <img
+            src={thumb}
+            alt=""
+            width={1200}
+            height={630}
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              filter: "blur(20px) brightness(0.3)",
+              transform: "scale(1.1)",
+            }}
+          />
+        )}
+
+        {/* Dark overlay for readability */}
         <div
           style={{
             position: "absolute",
             inset: 0,
             display: "flex",
-            opacity: 0.06,
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
-
-        {/* Accent glow top-right */}
-        <div
-          style={{
-            position: "absolute",
-            top: -120,
-            right: -120,
-            width: 400,
-            height: 400,
-            borderRadius: "50%",
             background:
-              "radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)",
-            display: "flex",
-          }}
-        />
-
-        {/* Accent glow bottom-left */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: -80,
-            left: -80,
-            width: 300,
-            height: 300,
-            borderRadius: "50%",
-            background:
-              "radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%)",
-            display: "flex",
+              "linear-gradient(180deg, rgba(10,10,10,0.85) 0%, rgba(10,10,10,0.7) 50%, rgba(10,10,10,0.9) 100%)",
           }}
         />
 
@@ -163,7 +152,7 @@ export default async function ProjectOgImage({
             }}
           >
             <span style={{ color: "#22c55e", fontSize: 22 }}>❯</span>
-            <span style={{ color: "#6b7280", fontSize: 18 }}>
+            <span style={{ color: "#9ca3af", fontSize: 18 }}>
               ~/portfolio/projects/{slug}
             </span>
           </div>
@@ -187,7 +176,7 @@ export default async function ProjectOgImage({
           <p
             style={{
               fontSize: 22,
-              color: "#71717a",
+              color: "#d4d4d8",
               marginTop: 16,
               lineHeight: 1.5,
               maxWidth: 800,
@@ -211,8 +200,8 @@ export default async function ProjectOgImage({
                 style={{
                   padding: "8px 16px",
                   borderRadius: 6,
-                  backgroundColor: "rgba(99,102,241,0.1)",
-                  border: "1px solid rgba(99,102,241,0.2)",
+                  backgroundColor: "rgba(99,102,241,0.15)",
+                  border: "1px solid rgba(99,102,241,0.3)",
                   color: "#a5b4fc",
                   fontSize: 16,
                   display: "flex",
@@ -231,13 +220,13 @@ export default async function ProjectOgImage({
               justifyContent: "space-between",
               marginTop: "auto",
               paddingTop: 16,
-              borderTop: "1px solid rgba(255,255,255,0.08)",
+              borderTop: "1px solid rgba(255,255,255,0.1)",
             }}
           >
-            <span style={{ color: "#a1a1aa", fontSize: 16 }}>
+            <span style={{ color: "#d4d4d8", fontSize: 16 }}>
               {settings.name} · {settings.title}
             </span>
-            <span style={{ color: "#52525b", fontSize: 14 }}>
+            <span style={{ color: "#71717a", fontSize: 14 }}>
               {settings.email}
             </span>
           </div>
