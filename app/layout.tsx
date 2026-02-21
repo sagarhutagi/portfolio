@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { LayoutShell } from "@/components/layout-shell";
 import { CustomCursor } from "@/components/custom-cursor";
 import { PageViewTracker } from "@/components/page-view-tracker";
+import { getSettings } from "@/lib/data";
 import { Toaster } from "sonner";
 import "./globals.css";
 
@@ -19,43 +20,45 @@ const sans = Inter({
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://example.com";
 
-export const metadata: Metadata = {
-  title: {
-    default: "John Doe — Full Stack Developer",
-    template: "%s — John Doe",
-  },
-  description:
-    "Full Stack Developer building modern web experiences with clean code and thoughtful design.",
-  metadataBase: new URL(siteUrl),
-  openGraph: {
-    title: "John Doe — Full Stack Developer",
-    description:
-      "Full Stack Developer building modern web experiences with clean code and thoughtful design.",
-    url: siteUrl,
-    siteName: "John Doe Portfolio",
-    locale: "en_US",
-    type: "website",
-    images: [
-      {
-        url: "/opengraph-image",
-        width: 1200,
-        height: 630,
-        alt: "John Doe — Full Stack Developer",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "John Doe — Full Stack Developer",
-    description:
-      "Full Stack Developer building modern web experiences with clean code and thoughtful design.",
-    images: ["/twitter-image"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const s = await getSettings();
+  const fullTitle = `${s.name} — ${s.title}`;
+
+  return {
+    title: {
+      default: fullTitle,
+      template: `%s — ${s.name}`,
+    },
+    description: s.intro,
+    metadataBase: new URL(siteUrl),
+    openGraph: {
+      title: fullTitle,
+      description: s.intro,
+      url: siteUrl,
+      siteName: `${s.name} Portfolio`,
+      locale: "en_US",
+      type: "website",
+      images: [
+        {
+          url: "/opengraph-image",
+          width: 1200,
+          height: 630,
+          alt: fullTitle,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: fullTitle,
+      description: s.intro,
+      images: ["/twitter-image"],
+    },
+    robots: {
+      index: true,
+      follow: true,
+    },
+  };
+}
 
 export default function RootLayout({
   children,

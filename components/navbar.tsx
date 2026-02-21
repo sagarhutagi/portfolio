@@ -27,6 +27,7 @@ export function Navbar() {
   const [socials, setSocials] = useState<SocialLink[]>([]);
   const [settings, setSettings] = useState<{ name?: string; title?: string }>({});
   const pathname = usePathname();
+  const isSubPage = pathname !== "/" && !pathname.startsWith("/admin");
 
   if (pathname.startsWith("/admin")) return null;
 
@@ -51,6 +52,14 @@ export function Navbar() {
   }, []);
 
   useEffect(() => {
+    if (isSubPage) {
+      // Map pathname to the matching nav section
+      if (pathname.startsWith("/projects")) setActiveSection("#projects");
+      else if (pathname.startsWith("/learnings")) setActiveSection("#learnings");
+      else if (pathname.startsWith("/experience")) setActiveSection("#experience");
+      return;
+    }
+
     const ids = NAV_LINKS.map((l) => l.href.slice(1));
     const observer = new IntersectionObserver(
       (entries) => {
@@ -67,9 +76,14 @@ export function Navbar() {
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
-  }, []);
+  }, [isSubPage, pathname]);
 
   const scrollTo = (hash: string) => {
+    if (isSubPage) {
+      // Navigate back to home page with hash
+      window.location.href = `/${hash}`;
+      return;
+    }
     const el = document.getElementById(hash.slice(1));
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
