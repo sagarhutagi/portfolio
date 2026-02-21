@@ -9,9 +9,9 @@ import {
   reorderLearnings,
 } from "@/lib/actions";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { RichTextEditor } from "@/components/rich-text-editor";
 import { toast } from "sonner";
 import type { Learning } from "@/types";
 import {
@@ -229,26 +229,24 @@ export default function AdminLearningsPage() {
                   }
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Summary</Label>
-                <Textarea
-                  value={editing.summary}
-                  onChange={(e) =>
-                    setEditing({ ...editing, summary: e.target.value })
-                  }
-                  rows={2}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Full Details</Label>
-                <Textarea
-                  value={editing.full_details}
-                  onChange={(e) =>
-                    setEditing({ ...editing, full_details: e.target.value })
-                  }
-                  rows={10}
-                />
-              </div>
+              <RichTextEditor
+                value={editing.summary}
+                onChange={(html) =>
+                  setEditing({ ...editing, summary: html })
+                }
+                label="Summary"
+                placeholder="Brief summary…"
+                minHeight={80}
+              />
+              <RichTextEditor
+                value={editing.full_details}
+                onChange={(html) =>
+                  setEditing({ ...editing, full_details: html })
+                }
+                label="Full Details"
+                placeholder="Detailed notes, insights, code snippets…"
+                minHeight={250}
+              />
               <div className="flex gap-3 pt-2">
                 <Button onClick={handleSave} disabled={saving}>
                   {saving ? "Saving…" : "Save Learning"}

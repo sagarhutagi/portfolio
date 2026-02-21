@@ -291,3 +291,207 @@ body.terminal-resizing .custom-cursor {
   );
   opacity: 0.3;
 }
+
+/* ═══════════════════════════════════════════════════
+   TIPTAP RICH TEXT EDITOR
+   ═══════════════════════════════════════════════════ */
+
+/* Editor area */
+.rich-text-editor .tiptap {
+  outline: none;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+.rich-text-editor .tiptap p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: hsl(var(--muted-foreground));
+  pointer-events: none;
+  height: 0;
+}
+
+.rich-text-editor .tiptap > * + * {
+  margin-top: 0.5em;
+}
+
+.rich-text-editor .tiptap h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.rich-text-editor .tiptap h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.rich-text-editor .tiptap h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.rich-text-editor .tiptap strong {
+  font-weight: 700;
+}
+
+.rich-text-editor .tiptap em {
+  font-style: italic;
+}
+
+.rich-text-editor .tiptap u {
+  text-decoration: underline;
+}
+
+.rich-text-editor .tiptap s {
+  text-decoration: line-through;
+}
+
+.rich-text-editor .tiptap code {
+  background: hsl(var(--muted));
+  padding: 0.15em 0.35em;
+  border-radius: 2px;
+  font-size: 0.85em;
+  font-family: ui-monospace, monospace;
+}
+
+.rich-text-editor .tiptap pre {
+  background: hsl(var(--muted));
+  padding: 0.75rem 1rem;
+  border-radius: 2px;
+  overflow-x: auto;
+}
+
+.rich-text-editor .tiptap pre code {
+  background: none;
+  padding: 0;
+}
+
+.rich-text-editor .tiptap ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+}
+
+.rich-text-editor .tiptap ol {
+  list-style-type: decimal;
+  padding-left: 1.5em;
+}
+
+.rich-text-editor .tiptap li {
+  margin-top: 0.25em;
+}
+
+.rich-text-editor .tiptap blockquote {
+  border-left: 3px solid var(--accent-color);
+  padding-left: 1em;
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+.rich-text-editor .tiptap a {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.rich-text-editor .tiptap hr {
+  border: none;
+  border-top: 1px solid hsl(var(--border));
+  margin: 1em 0;
+}
+
+/* ═══════════════════════════════════════════════════
+   RENDERED RICH TEXT (frontend display)
+   ═══════════════════════════════════════════════════ */
+
+.prose-rendered > * + * {
+  margin-top: 0.5em;
+}
+
+.prose-rendered h1 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.prose-rendered h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.prose-rendered h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.prose-rendered strong {
+  font-weight: 700;
+}
+
+.prose-rendered em {
+  font-style: italic;
+}
+
+.prose-rendered u {
+  text-decoration: underline;
+}
+
+.prose-rendered s {
+  text-decoration: line-through;
+}
+
+.prose-rendered code {
+  background: hsl(var(--muted));
+  padding: 0.15em 0.35em;
+  border-radius: 2px;
+  font-size: 0.85em;
+  font-family: ui-monospace, monospace;
+}
+
+.prose-rendered pre {
+  background: hsl(var(--muted));
+  padding: 0.75rem 1rem;
+  border-radius: 2px;
+  overflow-x: auto;
+}
+
+.prose-rendered pre code {
+  background: none;
+  padding: 0;
+}
+
+.prose-rendered ul {
+  list-style-type: disc;
+  padding-left: 1.5em;
+}
+
+.prose-rendered ol {
+  list-style-type: decimal;
+  padding-left: 1.5em;
+}
+
+.prose-rendered li {
+  margin-top: 0.25em;
+}
+
+.prose-rendered blockquote {
+  border-left: 3px solid var(--accent-color);
+  padding-left: 1em;
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+.prose-rendered a {
+  color: var(--accent-color);
+  text-decoration: underline;
+}
+
+.prose-rendered hr {
+  border: none;
+  border-top: 1px solid hsl(var(--border));
+  margin: 1em 0;
+}

@@ -36,9 +36,10 @@ export function ProjectCard({ project }: ProjectCardProps) {
           <span className="text-[var(--accent-color)] mr-1.5">▸</span>
           {project.title}
         </h3>
-        <p className="text-xs text-muted-foreground mb-4 line-clamp-2">
-          {project.short_desc}
-        </p>
+        <p
+          className="text-xs text-muted-foreground mb-4 line-clamp-2 prose-rendered"
+          dangerouslySetInnerHTML={{ __html: project.short_desc }}
+        />
         <div className="flex flex-wrap gap-1.5">
           {project.tech.map((t) => (
             <Badge key={t} variant="secondary" className="text-[10px]">

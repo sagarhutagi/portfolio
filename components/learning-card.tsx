@@ -23,9 +23,9 @@ export function LearningCard({ learning, expanded, onToggle }: LearningCardProps
             <span className="text-[var(--accent-color)] mr-1.5">#</span>
             {learning.title}
           </h3>
-          <p className="text-xs text-muted-foreground line-clamp-2">
-            {learning.summary}
-          </p>
+          <p className="text-xs text-muted-foreground line-clamp-2"
+            dangerouslySetInnerHTML={{ __html: learning.summary }}
+          />
         </div>
         <ChevronDown
           size={14}
@@ -39,9 +39,10 @@ export function LearningCard({ learning, expanded, onToggle }: LearningCardProps
       {expanded && (
         <div className="px-4 sm:px-5 pb-4 sm:pb-5">
           <div className="h-px bg-border mb-4" />
-          <div className="text-xs text-foreground/80 whitespace-pre-line leading-relaxed">
-            {learning.full_details}
-          </div>
+          <div
+            className="text-xs text-foreground/80 leading-relaxed prose-rendered"
+            dangerouslySetInnerHTML={{ __html: learning.full_details }}
+          />
         </div>
       )}
     </div>

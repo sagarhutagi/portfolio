@@ -91,9 +91,10 @@ export default async function ProjectPage({ params }: Props) {
             <h2 className="text-xs text-[var(--accent-color)] mb-4 font-mono">
               <span className="text-muted-foreground">// </span>overview
             </h2>
-            <div className="text-sm text-foreground/80 whitespace-pre-line leading-relaxed">
-              {project.long_desc}
-            </div>
+            <div
+              className="text-sm text-foreground/80 leading-relaxed prose-rendered"
+              dangerouslySetInnerHTML={{ __html: project.long_desc }}
+            />
           </section>
         </ScrollReveal>
       )}

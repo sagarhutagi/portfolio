@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { updateSettings } from "@/lib/actions";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { ImageUpload } from "@/components/image-upload";
+import { RichTextEditor } from "@/components/rich-text-editor";
 import { toast } from "sonner";
 import type { SiteSettings } from "@/types";
 
@@ -98,27 +98,25 @@ export default function AdminSettingsPage() {
           />
         </div>
 
-        <div className="space-y-2">
-          <Label>Intro</Label>
-          <Textarea
-            value={settings.intro}
-            onChange={(e) =>
-              setSettings({ ...settings, intro: e.target.value })
-            }
-            rows={2}
-          />
-        </div>
+        <RichTextEditor
+          value={settings.intro}
+          onChange={(html) =>
+            setSettings({ ...settings, intro: html })
+          }
+          label="Intro"
+          placeholder="A short intro line…"
+          minHeight={80}
+        />
 
-        <div className="space-y-2">
-          <Label>About</Label>
-          <Textarea
-            value={settings.about}
-            onChange={(e) =>
-              setSettings({ ...settings, about: e.target.value })
-            }
-            rows={4}
-          />
-        </div>
+        <RichTextEditor
+          value={settings.about}
+          onChange={(html) =>
+            setSettings({ ...settings, about: html })
+          }
+          label="About"
+          placeholder="Tell visitors about yourself…"
+          minHeight={150}
+        />
 
         <div className="space-y-2">
           <Label>Skills (comma separated)</Label>

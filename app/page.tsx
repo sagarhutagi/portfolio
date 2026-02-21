@@ -114,7 +114,7 @@ export default async function HomePage() {
           {s.intro && (
             <p className="text-muted-foreground max-w-lg mb-6 leading-relaxed text-sm sm:text-base">
               <span className="text-[var(--accent-color)] mr-2 font-mono">&gt;</span>
-              {s.intro}
+              <span dangerouslySetInnerHTML={{ __html: s.intro }} />
             </p>
           )}
           {/* Action links */}
@@ -176,9 +176,10 @@ export default async function HomePage() {
                   <h2 className="text-xs font-mono text-[var(--accent-color)] mb-4">
                     <span className="text-muted-foreground">// </span>about
                   </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {s.about}
-                  </p>
+                  <div
+                    className="text-sm text-muted-foreground leading-relaxed prose-rendered"
+                    dangerouslySetInnerHTML={{ __html: s.about }}
+                  />
                 </div>
               )}
             </section>

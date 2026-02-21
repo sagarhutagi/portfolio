@@ -9,9 +9,9 @@ import {
   reorderExperience,
 } from "@/lib/actions";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { RichTextEditor } from "@/components/rich-text-editor";
 import { toast } from "sonner";
 import type { WorkExperience } from "@/types";
 import {
@@ -292,17 +292,15 @@ export default function AdminExperiencePage() {
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label>Description</Label>
-                <Textarea
-                  value={editing.description}
-                  onChange={(e) =>
-                    setEditing({ ...editing, description: e.target.value })
-                  }
-                  rows={4}
-                  placeholder="What did you do in this role?"
-                />
-              </div>
+              <RichTextEditor
+                value={editing.description}
+                onChange={(html) =>
+                  setEditing({ ...editing, description: html })
+                }
+                label="Description"
+                placeholder="What did you do in this role?"
+                minHeight={150}
+              />
 
               <div className="space-y-2">
                 <Label>Tech Stack</Label>

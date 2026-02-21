@@ -9,10 +9,10 @@ import {
   reorderProjects,
 } from "@/lib/actions";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { MultiImageUpload } from "@/components/image-upload";
+import { RichTextEditor } from "@/components/rich-text-editor";
 import { toast } from "sonner";
 import type { Project } from "@/types";
 import {
@@ -257,26 +257,24 @@ export default function AdminProjectsPage() {
                   }
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Short Description</Label>
-                <Textarea
-                  value={editing.short_desc}
-                  onChange={(e) =>
-                    setEditing({ ...editing, short_desc: e.target.value })
-                  }
-                  rows={2}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Full Description</Label>
-                <Textarea
-                  value={editing.long_desc}
-                  onChange={(e) =>
-                    setEditing({ ...editing, long_desc: e.target.value })
-                  }
-                  rows={6}
-                />
-              </div>
+              <RichTextEditor
+                value={editing.short_desc}
+                onChange={(html) =>
+                  setEditing({ ...editing, short_desc: html })
+                }
+                label="Short Description"
+                placeholder="Brief project summary…"
+                minHeight={80}
+              />
+              <RichTextEditor
+                value={editing.long_desc}
+                onChange={(html) =>
+                  setEditing({ ...editing, long_desc: html })
+                }
+                label="Full Description"
+                placeholder="Detailed project description…"
+                minHeight={200}
+              />
               <div className="space-y-2">
                 <Label>Tech (comma separated)</Label>
                 <Input

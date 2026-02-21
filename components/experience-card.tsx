@@ -61,9 +61,10 @@ export function ExperienceCard({ experience, isLast }: ExperienceCardProps) {
         </p>
 
         {/* Description */}
-        <p className="text-xs text-muted-foreground leading-relaxed mb-3">
-          {experience.description}
-        </p>
+        <div
+          className="text-xs text-muted-foreground leading-relaxed mb-3 prose-rendered"
+          dangerouslySetInnerHTML={{ __html: experience.description }}
+        />
 
         {/* Tech */}
         {experience.tech.length > 0 && (
