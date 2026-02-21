@@ -4,6 +4,14 @@ import { createServerSupabase, verifyAuth } from "./supabase-server";
 import { revalidatePath } from "next/cache";
 import type { SiteSettings, Project, Learning, WorkExperience } from "@/types";
 
+/**
+ * Revalidate all public-facing pages so changes appear instantly.
+ * Using "layout" revalidates every page that shares the root layout.
+ */
+function revalidateAll() {
+  revalidatePath("/", "layout");
+}
+
 /* ═══════════════════════════════════════════════════
    PUBLIC ACTIONS
    ═══════════════════════════════════════════════════ */
@@ -55,7 +63,7 @@ export async function updateSettings(
       })
       .eq("id", 1);
     if (error) return { success: false, error: error.message };
-    revalidatePath("/");
+    revalidateAll();
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -81,7 +89,7 @@ export async function createProject(
       .select("id")
       .single();
     if (error) return { success: false, error: error.message };
-    revalidatePath("/projects");
+    revalidateAll();
     return { success: true, id: row?.id };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -102,7 +110,7 @@ export async function updateProject(
       payload.screenshots = JSON.stringify(data.screenshots);
     const { error } = await db.from("projects").update(payload).eq("id", id);
     if (error) return { success: false, error: error.message };
-    revalidatePath("/projects");
+    revalidateAll();
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -118,7 +126,7 @@ export async function deleteProject(
     const db = createServerSupabase();
     const { error } = await db.from("projects").delete().eq("id", id);
     if (error) return { success: false, error: error.message };
-    revalidatePath("/projects");
+    revalidateAll();
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -136,7 +144,7 @@ export async function reorderProjects(
       db.from("projects").update({ order: index }).eq("id", id)
     );
     await Promise.all(updates);
-    revalidatePath("/projects");
+    revalidateAll();
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -158,7 +166,7 @@ export async function createLearning(
       .select("id")
       .single();
     if (error) return { success: false, error: error.message };
-    revalidatePath("/learnings");
+    revalidateAll();
     return { success: true, id: row?.id };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -175,7 +183,7 @@ export async function updateLearning(
     const db = createServerSupabase();
     const { error } = await db.from("learnings").update(data).eq("id", id);
     if (error) return { success: false, error: error.message };
-    revalidatePath("/learnings");
+    revalidateAll();
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -191,7 +199,7 @@ export async function deleteLearning(
     const db = createServerSupabase();
     const { error } = await db.from("learnings").delete().eq("id", id);
     if (error) return { success: false, error: error.message };
-    revalidatePath("/learnings");
+    revalidateAll();
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -209,7 +217,7 @@ export async function reorderLearnings(
       db.from("learnings").update({ order: index }).eq("id", id)
     );
     await Promise.all(updates);
-    revalidatePath("/learnings");
+    revalidateAll();
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -254,7 +262,7 @@ export async function createExperience(
       .select("id")
       .single();
     if (error) return { success: false, error: error.message };
-    revalidatePath("/");
+    revalidateAll();
     return { success: true, id: row?.id };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -273,7 +281,7 @@ export async function updateExperience(
     if (data.tech) payload.tech = JSON.stringify(data.tech);
     const { error } = await db.from("experience").update(payload).eq("id", id);
     if (error) return { success: false, error: error.message };
-    revalidatePath("/");
+    revalidateAll();
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -289,7 +297,7 @@ export async function deleteExperience(
     const db = createServerSupabase();
     const { error } = await db.from("experience").delete().eq("id", id);
     if (error) return { success: false, error: error.message };
-    revalidatePath("/");
+    revalidateAll();
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
@@ -307,7 +315,7 @@ export async function reorderExperience(
       db.from("experience").update({ order: index }).eq("id", id)
     );
     await Promise.all(updates);
-    revalidatePath("/");
+    revalidateAll();
     return { success: true };
   } catch {
     return { success: false, error: "Unauthorized or server error." };
