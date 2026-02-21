@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { ExternalLink, Github, ArrowLeft } from "lucide-react";
 import { getProjects, getProjectBySlug, getSettings } from "@/lib/data";
 import { slugify } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { ScreenshotGallery } from "@/components/screenshot-gallery";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -124,22 +124,10 @@ export default async function ProjectPage({ params }: Props) {
             <h2 className="text-xs text-[var(--accent-color)] mb-4 font-mono">
               <span className="text-muted-foreground">// </span>screenshots
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {project.screenshots.map((src, i) => (
-                <div
-                  key={i}
-                  className="relative aspect-video border border-border overflow-hidden"
-                >
-                  <Image
-                    src={src}
-                    alt={`${project.title} screenshot ${i + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-              ))}
-            </div>
+            <ScreenshotGallery
+              screenshots={project.screenshots}
+              projectTitle={project.title}
+            />
           </section>
         </ScrollReveal>
       )}

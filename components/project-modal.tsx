@@ -5,7 +5,7 @@ import type { Project } from "@/types";
 import { X, ExternalLink, Github } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
-import Image from "next/image";
+import { ScreenshotGallery } from "./screenshot-gallery";
 
 interface ProjectModalProps {
   project: Project;
@@ -80,22 +80,10 @@ export function ProjectModal({ project, onClose }: ProjectModalProps) {
             <h2 className="text-xs text-[var(--accent-color)] mb-4">
               <span className="text-muted-foreground">// </span>screenshots
             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {project.screenshots.map((src, i) => (
-                <div
-                  key={i}
-                  className="relative aspect-video border border-border overflow-hidden"
-                >
-                  <Image
-                    src={src}
-                    alt={`${project.title} screenshot ${i + 1}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
-                </div>
-              ))}
-            </div>
+            <ScreenshotGallery
+              screenshots={project.screenshots}
+              projectTitle={project.title}
+            />
           </section>
         )}
 
