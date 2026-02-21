@@ -271,3 +271,28 @@ where not exists (select 1 from public.learnings limit 1);
 -- alter table public.settings add column if not exists reading text not null default 'Clean Code';
 -- alter table public.settings add column if not exists interests text not null default 'OSS, Design';
 -- alter table public.settings add column if not exists profile_image_url text not null default '';
+
+-- ───────────────────────────────────────────────────────────────
+-- 6. STORAGE BUCKET  (for image uploads)
+--    The bucket is auto-created by the upload API route, but you
+--    can also create it manually in the Supabase Dashboard:
+--    Storage → New bucket → Name: "portfolio-images" → Public
+-- ───────────────────────────────────────────────────────────────
+-- Run this in SQL Editor if you want to set up the storage
+-- bucket policy for public read access:
+--
+-- insert into storage.buckets (id, name, public)
+--   values ('portfolio-images', 'portfolio-images', true)
+--   on conflict (id) do nothing;
+--
+-- create policy "Public read portfolio images"
+--   on storage.objects for select
+--   using (bucket_id = 'portfolio-images');
+--
+-- create policy "Authenticated users can upload images"
+--   on storage.objects for insert to authenticated
+--   with check (bucket_id = 'portfolio-images');
+--
+-- create policy "Authenticated users can delete images"
+--   on storage.objects for delete to authenticated
+--   using (bucket_id = 'portfolio-images');

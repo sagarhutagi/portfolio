@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { MultiImageUpload } from "@/components/image-upload";
 import { toast } from "sonner";
 import type { Project } from "@/types";
 import {
@@ -37,7 +38,6 @@ export default function AdminProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [editing, setEditing] = useState<Project | (Omit<Project, "id"> & { id?: string }) | null>(null);
   const [techText, setTechText] = useState("");
-  const [screenshotsText, setScreenshotsText] = useState("");
   const [saving, setSaving] = useState(false);
 
   const load = useCallback(async () => {
@@ -91,13 +91,11 @@ export default function AdminProjectsPage() {
   const openNew = () => {
     setEditing({ ...EMPTY_PROJECT, order: projects.length });
     setTechText("");
-    setScreenshotsText("");
   };
 
   const openEdit = (project: Project) => {
     setEditing({ ...project });
     setTechText(project.tech.join(", "));
-    setScreenshotsText(project.screenshots.join("\n"));
   };
 
   /* ── Save ── */
@@ -115,10 +113,6 @@ export default function AdminProjectsPage() {
       ...editing,
       tech: techText
         .split(",")
-        .map((s) => s.trim())
-        .filter(Boolean),
-      screenshots: screenshotsText
-        .split("\n")
         .map((s) => s.trim())
         .filter(Boolean),
     };
@@ -291,15 +285,14 @@ export default function AdminProjectsPage() {
                   placeholder="Next.js, React, ..."
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Screenshot URLs (one per line)</Label>
-                <Textarea
-                  value={screenshotsText}
-                  onChange={(e) => setScreenshotsText(e.target.value)}
-                  rows={3}
-                  placeholder="https://picsum.photos/seed/img1/800/500"
-                />
-              </div>
+              <MultiImageUpload
+                value={editing.screenshots}
+                onChange={(urls) =>
+                  setEditing({ ...editing, screenshots: urls })
+                }
+                label="Screenshots"
+                hint="Upload images or paste URLs for project screenshots."
+              />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Live URL</Label>

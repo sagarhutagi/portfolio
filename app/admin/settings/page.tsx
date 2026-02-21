@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { ImageUpload } from "@/components/image-upload";
 import { toast } from "sonner";
 import type { SiteSettings } from "@/types";
 
@@ -150,19 +151,14 @@ export default function AdminSettingsPage() {
           />
         </div>
 
-        <div className="space-y-2">
-          <Label>Profile Image URL</Label>
-          <Input
-            value={settings.profile_image_url}
-            onChange={(e) =>
-              setSettings({ ...settings, profile_image_url: e.target.value })
-            }
-            placeholder="https://example.com/photo.jpg"
-          />
-          <p className="text-xs text-muted-foreground">
-            Leave blank to show a default icon.
-          </p>
-        </div>
+        <ImageUpload
+          value={settings.profile_image_url}
+          onChange={(url) =>
+            setSettings({ ...settings, profile_image_url: url })
+          }
+          label="Profile Image"
+          hint="Leave blank to show a default icon."
+        />
 
         {/* ── Contact & Location ── */}
         <div className="pt-4 border-t border-border">
