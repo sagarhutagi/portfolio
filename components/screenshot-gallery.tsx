@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import { X } from "lucide-react";
 
@@ -11,10 +12,25 @@ interface ScreenshotGalleryProps {
 
 /**
  * Grid of clickable screenshot thumbnails with a fullscreen lightbox.
- * Works on both desktop and mobile.
+ * The lightbox is portalled to document.body so it always covers the
+ * entire viewport regardless of parent overflow / stacking context.
  */
 export function ScreenshotGallery({ screenshots, projectTitle }: ScreenshotGalleryProps) {
   const [lightboxSrc, setLightboxSrc] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  /* Wait for client mount so createPortal has a target */
+  useEffect(() => setMounted(true), []);
+
+  /* Close on Escape key */
+  useEffect(() => {
+    if (!lightboxSrc) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLightboxSrc(null);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lightboxSrc]);
 
   return (
     <>
@@ -43,10 +59,10 @@ export function ScreenshotGallery({ screenshots, projectTitle }: ScreenshotGalle
         ))}
       </div>
 
-      {/* ── Image Lightbox ── */}
-      {lightboxSrc && (
+      {/* ── Image Lightbox (portalled to body) ── */}
+      {mounted && lightboxSrc && createPortal(
         <div
-          className="fixed inset-0 z-[60] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8"
+          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8"
           onClick={() => setLightboxSrc(null)}
         >
           <button
@@ -54,13 +70,13 @@ export function ScreenshotGallery({ screenshots, projectTitle }: ScreenshotGalle
               e.stopPropagation();
               setLightboxSrc(null);
             }}
-            className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[61] p-2.5 text-white/70 hover:text-white transition-colors bg-white/10 backdrop-blur-sm"
+            className="absolute top-4 right-4 sm:top-6 sm:right-6 z-[10000] p-2.5 text-white/70 hover:text-white transition-colors bg-white/10 backdrop-blur-sm rounded-md"
             aria-label="Close image"
             data-interactive
           >
             <X size={22} />
           </button>
-          <div className="relative w-full max-w-5xl aspect-video">
+          <div className="relative w-full h-full max-w-[95vw] max-h-[90vh]">
             <Image
               src={lightboxSrc}
               alt={`${projectTitle} screenshot`}
@@ -70,7 +86,8 @@ export function ScreenshotGallery({ screenshots, projectTitle }: ScreenshotGalle
               priority
             />
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );
