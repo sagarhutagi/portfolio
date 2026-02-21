@@ -1,5 +1,6 @@
 import type { SiteSettings, Project, Learning, WorkExperience } from "@/types";
 import { createServerSupabase } from "./supabase-server";
+import { slugify } from "./utils";
 
 /* ── Dummy / fallback data (used when Supabase is not configured) ── */
 
@@ -264,6 +265,11 @@ export async function getExperience(): Promise<WorkExperience[]> {
   } catch {
     return FALLBACK_EXPERIENCE;
   }
+}
+
+export async function getProjectBySlug(slug: string): Promise<Project | null> {
+  const projects = await getProjects();
+  return projects.find((p) => slugify(p.title) === slug) ?? null;
 }
 
 export { FALLBACK_SETTINGS, FALLBACK_PROJECTS, FALLBACK_LEARNINGS, FALLBACK_EXPERIENCE };

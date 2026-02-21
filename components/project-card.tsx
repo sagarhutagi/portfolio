@@ -1,18 +1,17 @@
-"use client";
-
+import Link from "next/link";
 import type { Project } from "@/types";
+import { slugify } from "@/lib/utils";
 import { Badge } from "./ui/badge";
 
 interface ProjectCardProps {
   project: Project;
-  onClick: () => void;
 }
 
-export function ProjectCard({ project, onClick }: ProjectCardProps) {
+export function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <button
-      onClick={onClick}
-      className="project-card-enhanced text-left w-full p-4 sm:p-5 border border-border hover:border-[var(--accent-color)]/40 transition-colors duration-75 group"
+    <Link
+      href={`/projects/${slugify(project.title)}`}
+      className="project-card-enhanced text-left w-full block p-4 sm:p-5 border border-border hover:border-[var(--accent-color)]/40 transition-colors duration-75 group"
       data-interactive
     >
       <h3 className="text-sm font-semibold text-foreground mb-2 group-hover:text-[var(--accent-color)] transition-colors">
@@ -29,6 +28,6 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
           </Badge>
         ))}
       </div>
-    </button>
+    </Link>
   );
 }
