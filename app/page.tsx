@@ -88,7 +88,7 @@ export default async function HomePage() {
 
           <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 mb-6">
             {/* Profile picture */}
-            <div className="shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border border-[var(--accent-color)]/40 hover:border-[var(--accent-color)] flex items-center justify-center overflow-hidden bg-[var(--accent-color)]/5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(74,222,128,0.12)]">
+            <div className="shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 border border-[var(--accent-color)]/40 hover:border-[var(--accent-color)] flex items-center justify-center overflow-hidden bg-[var(--accent-color)]/5 transition-all duration-300 hover:shadow-[0_0_20px_rgba(var(--accent-rgb),0.15)]">
               {s.profile_image_url ? (
                 <Image
                   src={s.profile_image_url}

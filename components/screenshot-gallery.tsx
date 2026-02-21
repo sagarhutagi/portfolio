@@ -62,7 +62,8 @@ export function ScreenshotGallery({ screenshots, projectTitle }: ScreenshotGalle
       {/* ── Image Lightbox (portalled to body) ── */}
       {mounted && lightboxSrc && createPortal(
         <div
-          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8"
+          className="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 sm:p-8 cursor-default"
+          data-lightbox
           onClick={() => setLightboxSrc(null)}
         >
           <button

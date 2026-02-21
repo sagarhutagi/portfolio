@@ -14,6 +14,7 @@ html {
   :root {
     /* Accent color — darker green for light mode contrast */
     --accent-color: #16a34a;
+    --accent-rgb: 22, 163, 74;
 
     --background: 0 0% 100%;
     --foreground: 0 0% 6%;
@@ -39,6 +40,7 @@ html {
 
   .dark {
     --accent-color: #4ade80;
+    --accent-rgb: 74, 222, 128;
 
     --background: 120 5% 3%;
     --foreground: 120 5% 90%;
@@ -72,7 +74,7 @@ html {
     line-height: 1.6;
   }
   ::selection {
-    background: rgba(74, 222, 128, 0.25);
+    background: rgba(var(--accent-rgb), 0.25);
     color: inherit;
   }
 
@@ -97,6 +99,12 @@ html {
   body.terminal-resizing {
     cursor: inherit !important;
   }
+
+  /* Override: show cursor on lightbox overlay */
+  [data-lightbox],
+  [data-lightbox] * {
+    cursor: default !important;
+  }
 }
 
 /* Hide custom cursor during resize/drag */
@@ -107,7 +115,7 @@ body.terminal-resizing .custom-cursor {
 .custom-cursor {
   pointer-events: none;
   position: fixed;
-  z-index: 9999;
+  z-index: 99999;
   top: 0;
   left: 0;
 }
@@ -180,6 +188,65 @@ body.terminal-resizing .custom-cursor {
 }
 
 /* ═══════════════════════════════════════════════════
+   ORBITING SKILLS – LIGHT MODE VISIBILITY
+   ═══════════════════════════════════════════════════ */
+
+:root .orbit-ring-line {
+  border-color: hsl(0 0% 80% / 0.6);
+}
+
+.dark .orbit-ring-line {
+  border-color: hsl(var(--border) / 0.4);
+}
+
+/* ═══════════════════════════════════════════════════
+   TERMINAL – LIGHT MODE
+   Give the terminal a dark tinted background in light
+   mode so the green accent text pops.
+   ═══════════════════════════════════════════════════ */
+
+:root .terminal-shell {
+  --tw-bg-opacity: 1;
+  background-color: hsl(120 5% 8%);
+  color: hsl(120 5% 88%);
+  border-color: hsl(120 5% 16%);
+}
+
+:root .terminal-shell .terminal-titlebar {
+  background-color: hsl(120 5% 6% / 0.9);
+  border-color: hsl(120 5% 16%);
+}
+
+:root .terminal-shell .terminal-titlebar span {
+  color: hsl(120 5% 55%);
+}
+
+:root .terminal-shell .terminal-input-area {
+  background-color: hsl(120 5% 5% / 0.5);
+  border-color: hsl(120 5% 16%);
+}
+
+:root .terminal-shell .terminal-input {
+  color: hsl(120 5% 88%);
+}
+
+:root .terminal-shell .terminal-output-foreground {
+  color: hsl(120 5% 88%);
+}
+
+:root .terminal-shell .terminal-output-foreground80 {
+  color: hsl(120 5% 75%);
+}
+
+:root .terminal-shell .terminal-output-muted {
+  color: hsl(120 5% 50%);
+}
+
+:root .terminal-shell .terminal-btn-hover:hover {
+  background-color: hsl(120 5% 15%);
+}
+
+/* ═══════════════════════════════════════════════════
    FOCUS-VISIBLE (accessibility)
    ═══════════════════════════════════════════════════ */
 
@@ -198,7 +265,7 @@ body.terminal-resizing .custom-cursor {
   height: 320px;
   border-radius: 50%;
   background: radial-gradient(circle, var(--accent-color) 0%, transparent 70%);
-  opacity: 0.04;
+  opacity: 0.08;
   filter: blur(80px);
   pointer-events: none;
   top: -60px;
@@ -221,8 +288,12 @@ body.terminal-resizing .custom-cursor {
     var(--accent-color) 50%,
     transparent 100%
   );
-  opacity: 0.3;
+  opacity: 0.5;
   margin-bottom: 3rem;
+}
+
+.dark .section-divider {
+  opacity: 0.3;
 }
 
 /* ═══════════════════════════════════════════════════
@@ -236,11 +307,11 @@ body.terminal-resizing .custom-cursor {
 .info-card:hover {
   border-color: var(--accent-color);
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(74, 222, 128, 0.06);
+  box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.12);
 }
 
 .dark .info-card:hover {
-  box-shadow: 0 4px 20px rgba(74, 222, 128, 0.08);
+  box-shadow: 0 4px 20px rgba(var(--accent-rgb), 0.08);
 }
 
 /* ═══════════════════════════════════════════════════
@@ -253,11 +324,11 @@ body.terminal-resizing .custom-cursor {
 
 .project-card-enhanced:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(74, 222, 128, 0.05);
+  box-shadow: 0 8px 30px rgba(var(--accent-rgb), 0.1);
 }
 
 .dark .project-card-enhanced:hover {
-  box-shadow: 0 8px 30px rgba(74, 222, 128, 0.07);
+  box-shadow: 0 8px 30px rgba(var(--accent-rgb), 0.07);
 }
 
 /* ═══════════════════════════════════════════════════
@@ -270,11 +341,11 @@ body.terminal-resizing .custom-cursor {
 
 .learning-card-enhanced:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 24px rgba(74, 222, 128, 0.04);
+  box-shadow: 0 6px 24px rgba(var(--accent-rgb), 0.1);
 }
 
 .dark .learning-card-enhanced:hover {
-  box-shadow: 0 6px 24px rgba(74, 222, 128, 0.06);
+  box-shadow: 0 6px 24px rgba(var(--accent-rgb), 0.06);
 }
 
 /* ═══════════════════════════════════════════════════
@@ -289,6 +360,10 @@ body.terminal-resizing .custom-cursor {
     var(--accent-color) 50%,
     transparent 100%
   );
+  opacity: 0.5;
+}
+
+.dark .footer-gradient-line {
   opacity: 0.3;
 }
 

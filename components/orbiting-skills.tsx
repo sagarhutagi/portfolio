@@ -66,7 +66,7 @@ export function OrbitingSkills({ skills }: OrbitingSkillsProps) {
           >
             {/* Ring circle (visual) */}
             <div
-              className="absolute rounded-full border border-dashed border-border/40"
+              className="orbit-ring-line absolute rounded-full border border-dashed border-border/40"
               style={{
                 width: cfg.radius * 2,
                 height: cfg.radius * 2,
