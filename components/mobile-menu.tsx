@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { X } from "lucide-react";
 import { ThemeToggle } from "./theme-toggle";
 
@@ -16,8 +17,15 @@ interface MobileMenuProps {
 }
 
 export function MobileMenu({ onClose }: MobileMenuProps) {
+  const pathname = usePathname();
+  const isSubPage = pathname !== "/" && !pathname.startsWith("/admin");
+
   const scrollTo = (hash: string) => {
     onClose();
+    if (isSubPage) {
+      window.location.href = `/${hash}`;
+      return;
+    }
     // Small delay so the overlay closes before scrolling
     setTimeout(() => {
       const el = document.getElementById(hash.slice(1));
